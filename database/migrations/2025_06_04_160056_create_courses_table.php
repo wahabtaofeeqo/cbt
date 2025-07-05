@@ -15,7 +15,9 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('title');
             $table->string('code');
-            $table->text('description');
+            $table->string('level');
+            $table->text('description')->nullable();
+            $table->uuid('department_id');
             $table->string('status')->default('active');
             $table->timestamps();
         });

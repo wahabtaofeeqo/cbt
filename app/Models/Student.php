@@ -10,7 +10,7 @@ class Student extends Model
     use HasUuids;
 
     protected $fillable = [
-        'user_id', 'department', 'level'
+        'user_id', 'department_id', 'level', 'matric_number'
     ];
 
     /**

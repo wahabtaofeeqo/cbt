@@ -44,6 +44,8 @@ export interface User {
 }
 
 export interface Course {
+    id: string
+    code: string
     title: string
     description: string
     status: string
@@ -62,4 +64,17 @@ export interface Student {
     user: User
     level: string
     department: string
+}
+
+export interface Assessment {
+    id?: string
+    questions: any[]
+    attempts_allowed: number
+    due_date: string
+    passing_score: number
+    title: string
+    type: string
+    course: Course
+    submissions: number
+    [key: string]: unknown
 }

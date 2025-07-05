@@ -5,11 +5,13 @@ import { ToastContainer} from 'react-toastify';
 
 interface AppLayoutProps {
     children: ReactNode;
+    roles?: string[];
+    showSidebar?: boolean;
     breadcrumbs?: BreadcrumbItem[];
 }
 
-export default ({ children, breadcrumbs, ...props }: AppLayoutProps) => (
-    <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
+export default ({ children, breadcrumbs, roles, ...props }: AppLayoutProps) => (
+    <AppLayoutTemplate breadcrumbs={breadcrumbs} roles={roles} showSidebar={props.showSidebar} {...props}>
         <ToastContainer />
         {children}
     </AppLayoutTemplate>

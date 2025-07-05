@@ -11,6 +11,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { CiMenuKebab } from "react-icons/ci";
 import { toast } from 'react-toastify';
 import { PlusCircle } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -20,16 +21,24 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 type CourseProps = {
+    can: any
     courses: Course[]
+    departments: any[]
 }
 
-export default function index({courses}: CourseProps) {
+export default function index({can, courses, departments}: CourseProps) {
 
     const [isOpen, setOpen] = useState(false);
     const [isDelete, setDelete] = useState(false);
     const [course, setCourse] = useState<any>(null);
-    const { data, setData, post, put, processing, reset, errors } =
-        useForm<any>({ title: '', description: '', code: '', status: 'Active' });
+    const { data, setData, post, put, processing, reset, errors } = useForm<any>({ 
+        title: '', 
+        description: '', 
+        code: '', 
+        status: 'Active',
+        level: '100',
+        department_id: ''
+    });
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -148,22 +157,50 @@ export default function index({courses}: CourseProps) {
                                 <InputError message={errors.description} />
                             </div>
 
-                            {/* Duration and Status */}
                             <div className="">
-                                <div className="">
-                                    <Label htmlFor="status">Status</Label>
-                                    <select
-                                        id="status"
-                                        name="status"
-                                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                                        value={data.status}
-                                        onChange={(e) => setData("status", e.target.value)}
-                                        >
-                                        <option value="Active">Active</option>
-                                        <option value="Inactive">Inactive</option>
-                                    </select>
-                                    <InputError message={errors.status} />
-                                </div>
+                                <Label htmlFor="department">Department*</Label>
+                                <Select
+                                    value={data.department_id}
+                                    onValueChange={(value) => setData("department_id", value)}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select status" />
+                                    </SelectTrigger>
+        
+                                    <SelectContent>
+                                        {
+                                            departments.map((department) => (
+                                                <SelectItem key={department.id} value={department.id}>
+                                                    {department.name}
+                                                </SelectItem>
+                                            ))
+                                        }
+                                    </SelectContent>
+                                </Select>
+                                <InputError message={errors.status} />
+                            </div>
+
+                            <div className="">
+                                <Label htmlFor="level">Level*</Label>
+                                <Select
+                                    value={data.level}
+                                    onValueChange={(value) => setData("level", value)}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select Level" />
+                                    </SelectTrigger>
+        
+                                    <SelectContent>
+                                        {
+                                            ["100", "200", "300", "400"].map((level) => (
+                                                <SelectItem key={level} value={level}>
+                                                    {level} Level
+                                                </SelectItem>
+                                            ))
+                                        }
+                                    </SelectContent>
+                                </Select>
+                                <InputError message={errors.level} />
                             </div>
                        </div>
 
@@ -206,9 +243,13 @@ export default function index({courses}: CourseProps) {
 
             <Head title="Dashboard" />
             <div className='p-4'>
-                <div className="text-end mb-4">
-                    <button className="bg-indigo-600 text-white px-4 py-2 rounded text-sm font-medium cursor-pointer" onClick={toggleDialog}>Add Course</button>
-                </div>
+                {
+                    can?.create_course && (
+                        <div className="text-end mb-4">
+                            <button className="bg-indigo-600 text-white px-4 py-2 rounded text-sm font-medium cursor-pointer" onClick={toggleDialog}>Add Course</button>
+                        </div>
+                    )
+                }
 
                 {/* Courses Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
@@ -218,17 +259,21 @@ export default function index({courses}: CourseProps) {
                         {/* Three dots dropdown menu */}
                         <div className="absolute top-3 right-3">
                             <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="h-8 w-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    >
-                                    <CiMenuKebab />
-                                    {/* <CircleDotDashedIcon className="h-4 w-4" /> */}
-                                    <span className="sr-only">Actions</span>
-                                    </Button>
-                                </DropdownMenuTrigger>
+                                {
+                                    can?.create_course && (
+                                        <DropdownMenuTrigger asChild>
+                                            <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-8 w-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                                            >
+                                            <CiMenuKebab />
+                                            {/* <CircleDotDashedIcon className="h-4 w-4" /> */}
+                                            <span className="sr-only">Actions</span>
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                    )
+                                }
                                 <DropdownMenuContent align="end" className="w-40">
                                     <DropdownMenuItem
                                     onClick={() => handleEdit(course)}
@@ -252,32 +297,24 @@ export default function index({courses}: CourseProps) {
                             </DropdownMenu>
                         </div>
 
-                        {/* Card content (previous code remains the same) */}
-                        <div className="p-5 pt-10 flex-1"> {/* Added pt-8 to account for dropdown */}
+                        <div className={(can?.create_course ? 'pt-10' : '') + " p-5 flex-1"}>
                             <div className="flex justify-between items-start mb-3">
-                            <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1">
-                                {course.title}
-                            </h3>
-                            <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(course.status)}`}>
-                                {course.status}
-                            </span>
+                                <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1">
+                                    {course.title}
+                                </h3>
+                                <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(course.status)}`}>
+                                    {course.status}
+                                </span>
                             </div>
 
                             <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">
-                            {course.description}
+                                {course.description}
                             </p>
-
-                            {/* <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                            <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            {course.duration}
-                            </div> */}
                         </div>
 
                         <div className="px-5 py-3 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-100 dark:border-gray-700 flex justify-end">
                             <button className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
-                            View Details →
+                                View Details →
                             </button>
                         </div>
                     </div>

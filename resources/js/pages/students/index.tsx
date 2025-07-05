@@ -19,11 +19,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 type StudentProps = {
     students: Student[]
+    departments: { id: string, name: string }[]
 }
 
 const tableHeaders: any[] = ['SN', 'Name', 'Department', 'Level', 'Status', ''];
 
-export default function index({students}: StudentProps) {
+export default function index({students, departments}: StudentProps) {
 
     const [isOpen, setOpen] = useState(false);
     const [isDelete, setDelete] = useState(false);
@@ -62,11 +63,16 @@ export default function index({students}: StudentProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
 
-            {/* Adding New courses */}
+            {/* Adding New */}
             <Dialog open={isOpen} onOpenChange={(open) => {setOpen(open)}}>
                 <DialogContent>
                     <DialogTitle>{student ? 'Update' : 'Add New'} Student</DialogTitle>
-                    <AddStudent student={student} onClose={toggleDialog} />
+                    <div className="mt-4">
+                        <AddStudent
+                            student={student} 
+                            onClose={toggleDialog} 
+                            departments={departments}/>
+                    </div>
                 </DialogContent>
             </Dialog>
 

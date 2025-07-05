@@ -22,8 +22,8 @@ class TeacherRepository extends CrudRepository {
         ]);
 
         // Create user and assign role
-        $password = Str::random(6);
-        $payload['password'] = Hash::make($password);
+        $password = // Str::random(6);
+        $payload['password'] = Hash::make("Password");
         $user = User::create($payload);
         $user->assignRole($role);
 

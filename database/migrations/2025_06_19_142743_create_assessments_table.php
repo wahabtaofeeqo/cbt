@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('assessments', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('department_id');
-            $table->string('level')->nullable();        
-            $table->string('matric_number')->nullable();
+            $table->string("title");
+            $table->string("type");
+            $table->integer('passing_score');
+            $table->integer('attempts_allowed');
+            $table->date("due_date")->nullable();
+            $table->string('status')->default('active');
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('course_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('assessments');
     }
 };

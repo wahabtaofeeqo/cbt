@@ -22,8 +22,7 @@ class StudentRepository extends CrudRepository {
         ]);
 
         // Create user and assign role
-        $password = Str::random(6);
-        $payload['password'] = Hash::make($password);
+        $payload['password'] = Hash::make($payload['matric_number']);
         $user = User::create($payload);
         $user->assignRole($role);
 

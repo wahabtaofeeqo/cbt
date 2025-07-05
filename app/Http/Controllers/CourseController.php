@@ -10,64 +10,109 @@ use App\Repositories\CourseRepository;
 class CourseController extends Controller
 {
     /**
-     * var
+     * The course repository instance.
+     *
+     * @var CourseRepository
      */
     protected CourseRepository $repository;
 
-    public function __construct(CourseRepository $repository) {
+    /**
+     * Inject the repository dependency.
+     */
+    public function __construct(CourseRepository $repository)
+    {
         $this->repository = $repository;
     }
 
-    public function index() {
+    /**
+     * Display a listing of the courses.
+     */
+    public function index()
+    {
+        // Get all courses by default
+        $courses = Course::all();
+        $departments = \App\Models\Department::all();
+
+        // If user is a teacher, show only their courses
+        if (auth()->user()->hasRole('Teacher')) {
+            $courses = auth()->user()->teacher->courses;
+        }
+
+        // Render the courses index view with permissions and courses
         return Inertia::render('courses/index', [
-            'courses' => Course::all()
+            'can' => can(),
+            'courses' => $courses,
+            'departments' => $departments,
         ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created course in storage.
      */
     public function store(Request $request)
     {
-        $request->validate([
+        // Validate request data
+        $validated = $request->validate([
             'title' => 'required|string',
             'code' => 'required|string',
             'description' => 'required|string',
             'status' => 'required|string',
+            'level' => 'required|string',
+            'department_id' => 'required|exists:departments,id',
         ]);
 
         try {
-            // Create the course
-            Course::create($request->all());
+            // Create the course using validated data
+            Course::create($validated);
             return redirect()->route('courses.index');
-        }
-        catch (\Throwable $e) {
+        } catch (\Throwable $e) {
+            // Handle creation failure
             return back()->withErrors([
                 'message' => 'Failed to create Course'
             ]);
         }
     }
 
-    public function update(Request $request, $id) {
+    /**
+     * Update the specified course in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        // Find the course by ID
         $model = $this->repository->find($id);
-        if(!$model) {
+        if (!$model) {
             return back()->withErrors([
                 'message' => 'Course not found'
             ]);
         }
 
-        $model->update($request->all());
+        // Validate request data
+        $validated = $request->validate([
+            'title' => 'sometimes|required|string',
+            'code' => 'sometimes|required|string',
+            'description' => 'sometimes|required|string',
+            'status' => 'sometimes|required|string',
+        ]);
+
+        // Update the course
+        $model->update($validated);
         return to_route('courses.index');
     }
 
-    public function destroy($id) {
+    /**
+     * Remove the specified course from storage.
+     */
+    public function destroy($id)
+    {
+        // Find the course by ID
         $model = $this->repository->find($id);
-        if(!$model) {
+        if (!$model) {
             return back()->withErrors([
                 'message' => 'Course not found'
             ]);
         }
 
+        // Delete the course
         $model->delete();
         return to_route('courses.index');
     }

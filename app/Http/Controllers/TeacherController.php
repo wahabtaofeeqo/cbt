@@ -12,27 +12,35 @@ class TeacherController extends Controller
     protected TeacherRepository $repository;
     protected CourseRepository $courseRepository;
 
-    public function __construct(TeacherRepository $repository, CourseRepository $courseRepository) {
+    /**
+     * Inject repositories for teachers and courses.
+     */
+    public function __construct(TeacherRepository $repository, CourseRepository $courseRepository)
+    {
         $this->repository = $repository;
-        $this->courseRepository =  $courseRepository;
+        $this->courseRepository = $courseRepository;
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of teachers and courses.
      */
     public function index()
     {
         return Inertia::render('teachers/index', [
+            'can' => [
+                'create_teacher' => auth()->user()->hasRole('Super Admin'),
+            ],
             'courses' => $this->courseRepository->all(),
-            'teachers' => $this->repository->all([], ['user', 'courses'])
+            'teachers' => $this->repository->all([], ['user', 'courses']),
         ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created teacher in storage.
      */
     public function store(Request $request)
     {
+        // Validate request data
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
@@ -41,61 +49,61 @@ class TeacherController extends Controller
             'courses' => 'required|array',
             'courses.*' => 'required|uuid',
             'qualifications' => 'nullable|string',
-            'status' => 'required|in:Active,Inactive, On Leave'
+            'status' => 'required|in:Active,Inactive, On Leave',
         ]);
 
         try {
             $payload = $request->all();
-            $model = $this->repository->store($payload);
+            $this->repository->store($payload);
             return to_route('teachers.index');
-        }
-        catch (\Throwable $e) {
+        } catch (\Throwable $e) {
+            // Handle creation failure
             return back()->withErrors([
-                'message' => 'Failed to create Teacher. Please try again'
+                'message' => 'Failed to create Teacher. Please try again',
             ]);
         }
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified teacher (not implemented).
      */
     public function show(string $id)
     {
-        //
+        // Not implemented
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified teacher in storage.
      */
     public function update(Request $request, string $id)
     {
         try {
             $model = $this->repository->find($id);
-            if(!$model) {
+            if (!$model) {
                 return back()->withErrors([
-                    'message' => 'Teacher not found'
+                    'message' => 'Teacher not found',
                 ]);
             }
 
             $model->update($request->all());
             return to_route('teachers.index');
-        }
-        catch (\Throwable $th) {
+        } catch (\Throwable $th) {
+            // Handle update failure
             return back()->withErrors([
-                'message' => 'Failed to update Teacher'
+                'message' => 'Failed to update Teacher',
             ]);
         }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified teacher from storage.
      */
     public function destroy(string $id)
     {
         $model = $this->repository->find($id);
-        if(!$model) {
+        if (!$model) {
             return back()->withErrors([
-                'message' => 'Teacher not found'
+                'message' => 'Teacher not found',
             ]);
         }
 

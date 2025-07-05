@@ -10,7 +10,8 @@ class Course extends Model
     use HasUuids;
 
     protected $fillable = [
-        'title', 'description', 'status', 'code'
+        'title', 'description', 'status', 'code',
+        'level', 'department_id'
     ];
 
     /**

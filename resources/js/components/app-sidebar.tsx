@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { Book, BookOpen, Folder, LayoutGrid, UserCircleIcon, Users } from 'lucide-react';
+import { Book, BookOpen, Building2, Folder, LayoutGrid, UserCircleIcon, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -28,32 +28,27 @@ const mainNavItems: NavItem[] = [
         href: '/courses',
         icon: Book,
     },
-    // {
-    //     title: 'Roles',
-    //     href: '/roles',
-    //     icon: LayoutGrid,
-    // },
     {
         title: 'Assessments',
         href: '/assessments',
         icon: LayoutGrid,
     },
+    {
+        title: 'Departments',
+        href: '/departments',
+        icon: Building2,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
-    // {
-    //     title: 'Repository',
-    //     href: 'https://github.com/laravel/react-starter-kit',
-    //     icon: Folder,
-    // },
-    // {
-    //     title: 'Documentation',
-    //     href: 'https://laravel.com/docs/starter-kits',
-    //     icon: BookOpen,
-    // },
 ];
 
-export function AppSidebar() {
+type Props = {
+    roles?: string[]
+}
+
+export function AppSidebar({roles}: Props) {
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>

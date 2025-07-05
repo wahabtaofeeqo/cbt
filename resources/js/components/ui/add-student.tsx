@@ -10,16 +10,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { DialogClose, DialogFooter } from "./dialog";
 
 type Props = {
-    student: Student,
+    url?: string | null,
+    student?: Student,
     onClose: Function
+    departments: { id: string, name: string }[]
 }
 
-const AddStudent = ({ student, onClose}: Props) => {
+const AddStudent = ({ student, onClose, url, departments }: Props) => {
     const { data, setData, post, put, processing, errors, reset } = useForm<any>({
         name: "",
         email: "",
         phone: "",
-        department: "",
+        matric_number: "",
+        department_id: "",
         level: "",
         status: "Active"
     });
@@ -40,13 +43,15 @@ const AddStudent = ({ student, onClose}: Props) => {
             })
         }
         else {
-            post(route("students.store"), {
+            post(route(url ? url : "students.store"), {
                 onSuccess: () => {
                     reset();
                     if(onClose) onClose();
-                    toast('Student added successfully')
+                    toast('Created successfully')
                 },
                 onError: (e) => {
+                    console.log('Error', e);
+                    
                     toast(e.message ?? 'Failed to create Student');
                 }
             });
@@ -71,7 +76,7 @@ const AddStudent = ({ student, onClose}: Props) => {
             <div className="grid gap-4">
                 <div className="grid gap-4">
                     {/* Basic Information */}
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="name">Full Name*</Label>
                             <Input
@@ -103,7 +108,7 @@ const AddStudent = ({ student, onClose}: Props) => {
                     </div>
 
                     {/* Contact Information */}
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="">
                         <div className="grid gap-2">
                             <Label htmlFor="phone">Phone Number</Label>
                             <Input
@@ -117,7 +122,7 @@ const AddStudent = ({ student, onClose}: Props) => {
                             <InputError message={errors.phone} />
                         </div>
 
-                        <div className="grid gap-2">
+                        {/* <div className="grid gap-2">
                             <Label htmlFor="department">Department*</Label>
                             <Input
                                 id="department"
@@ -128,8 +133,44 @@ const AddStudent = ({ student, onClose}: Props) => {
                                 required
                             />
                             <InputError message={errors.department} />
-                        </div>
+                        </div> */}
                     </div>
+                </div>
+
+                <div>
+                    <Label htmlFor="department">Department*</Label>
+                    <Select
+                        value={data.department_id}
+                        onValueChange={(value) => setData("department_id", value)}
+                    >
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select status" />
+                        </SelectTrigger>
+
+                        <SelectContent>
+                            {
+                                departments.map((department) => (
+                                    <SelectItem key={department.id} value={department.id}>
+                                        {department.name}
+                                    </SelectItem>
+                                ))
+                            }
+                        </SelectContent>
+                    </Select>
+                    <InputError message={errors.status} />
+                </div>
+
+                 <div className="">
+                    <Label htmlFor="matric">Matric Number</Label>
+                    <Input
+                        id="matric"
+                        name="matric"
+                        value={data.matric_number}
+                        onChange={(e) => setData("matric_number", e.target.value)}
+                        placeholder="Matric Number"
+                        autoComplete="matric"
+                    />
+                    <InputError message={errors.matric} />
                 </div>
 
                 <div className="">
@@ -139,37 +180,43 @@ const AddStudent = ({ student, onClose}: Props) => {
                         onValueChange={(value) => setData("level", value)}
                     >
                         <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select status" />
+                            <SelectValue placeholder="Select Level" />
                         </SelectTrigger>
 
-                        <SelectContent>
-                            <SelectItem value="100">100 Level</SelectItem>
-                            <SelectItem value="200">200 Level</SelectItem>
-                            <SelectItem value="300">300 Level</SelectItem>
-                            <SelectItem value="400">400 Level</SelectItem>
+                       <SelectContent>
+                            {
+                                ["100", "200", "300", "400"].map((level) => (
+                                    <SelectItem key={level} value={level}>
+                                        {level} Level
+                                    </SelectItem>
+                                ))
+                            }
                         </SelectContent>
                     </Select>
                     <InputError message={errors.status} />
                 </div>
 
-                <div className="">
-                    <Label htmlFor="status">Status*</Label>
-                    <Select
-                        value={data.status}
-                        onValueChange={(value) => setData("status", value)}
-                    >
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
+                {
+                    student ? ( 
+                        <div className="">
+                            <Label htmlFor="status">Status*</Label>
+                            <Select
+                                value={data.status}
+                                onValueChange={(value) => setData("status", value)}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select status" />
+                                </SelectTrigger>
 
-                        <SelectContent>
-                            <SelectItem value="Active">Active</SelectItem>
-                            <SelectItem value="Suspended">Suspended</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <InputError message={errors.status} />
-                </div>
-
+                                <SelectContent>
+                                    <SelectItem value="Active">Active</SelectItem>
+                                    <SelectItem value="Suspended">Suspended</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <InputError message={errors.status} />
+                        </div>
+                    ) : null
+                } 
             </div>
 
             <DialogFooter className="gap-2">
@@ -180,7 +227,7 @@ const AddStudent = ({ student, onClose}: Props) => {
                 </DialogClose>
 
                 <Button type="submit" disabled={processing}>
-                    {processing ? "Please wait..." : student ? "Update" : "Add Student"}
+                    {processing ? "Please wait..." : student ? "Update" : "Create"}
                 </Button>
             </DialogFooter>
         </form>

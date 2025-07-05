@@ -3,10 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
-
+Route::get('/', 'IndexController@home')->name('home');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', 'IndexController@index')->name('dashboard');
 
@@ -32,6 +29,29 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/', 'StudentController@store')->name('students.store');
         Route::put('{id}', 'StudentController@update')->name('students.update');
         Route::delete('{id}', 'StudentController@destroy')->name('students.delete');
+    });
+
+    // Assessment
+    Route::prefix('assessments')->group(function () {
+        Route::get('/', 'AssessmentController@index')->name('assessments.index');
+        Route::get('{id}', 'AssessmentController@show')->name('assessments.show');
+        Route::post('/', 'AssessmentController@store')->name('assessments.store');
+        Route::put('{id}', 'AssessmentController@update')->name('assessments.update');
+        Route::delete('{id}', 'AssessmentController@destroy')->name('assessments.delete');
+    });
+
+    // Department
+    Route::prefix('departments')->group(function () {
+        Route::get('/', 'DepartmentController@index')->name('departments.index');
+        Route::get('{id}', 'DepartmentController@show')->name('departments.show');
+        Route::post('/', 'DepartmentController@store')->name('departments.store');
+        Route::put('{id}', 'DepartmentController@update')->name('departments.update');
+        Route::delete('{id}', 'DepartmentController@destroy')->name('departments.delete');
+    });
+
+    // Tests
+    Route::prefix('tests')->group(function () {
+        Route::get('{id}', 'AssessmentController@start')->name('assessments.start');
     });
 });
 

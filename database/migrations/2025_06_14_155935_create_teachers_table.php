@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('department');
+            $table->uuid('department_id')->nullable();
             $table->text('qualifications')->nullable();
-            // $table->string('status')->default('active');
             $table->uuid('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

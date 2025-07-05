@@ -27,8 +27,6 @@ const tableHeaders: any[] = ['SN', 'Name', 'Department', 'Courses', 'Status', ''
 
 export default function index({teachers, courses}: TeacherProps) {
 
-    console.log(teachers);
-
     const [isOpen, setOpen] = useState(false);
     const [isDelete, setDelete] = useState(false);
     const [teacher, setTeacher] = useState<any>(null);
@@ -66,7 +64,7 @@ export default function index({teachers, courses}: TeacherProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
 
-            {/* Adding New courses */}
+            {/* Adding New */}
             <Dialog open={isOpen} onOpenChange={(open) => {setOpen(open)}}>
                 <DialogContent>
                     <DialogTitle>Add New Teacher</DialogTitle>

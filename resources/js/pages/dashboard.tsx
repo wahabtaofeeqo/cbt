@@ -27,9 +27,13 @@ const tableData: any[] = [
     { name: 'Alice Williams', age: 24, email: 'alice@example.com', status: 'Pending' },
 ];
 
-export default function Dashboard() {
+type Props = {
+    roles: string[]
+}
+
+export default function Dashboard({roles}: Props) {
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout breadcrumbs={breadcrumbs} roles={roles}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 hidden">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">

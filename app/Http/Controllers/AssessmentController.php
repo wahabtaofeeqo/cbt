@@ -1,0 +1,146 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Inertia\Inertia;
+use App\Models\Course;
+use App\Models\Assessment;
+use Illuminate\Http\Request;
+use App\Repositories\AssessmentRepository;
+
+class AssessmentController extends Controller
+{
+    protected AssessmentRepository $repository;
+
+    /**
+     * Inject AssessmentRepository dependency.
+     */
+    public function __construct(AssessmentRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    /**
+     * Display a listing of the assessments.
+     * Shows all for admins, or only teacher's own for teachers.
+     */
+    public function index()
+    {
+        $user = auth()->user();
+
+        // Default: all courses and assessments
+        $courses = Course::all();
+        $assessments = $this->repository->all([], [
+            'questions', 'questions.options', 'course'
+        ]);
+
+        // If user is a teacher, show only their courses and assessments
+        if ($user->hasRole('Teacher')) {
+            $courses = $user->teacher->courses;
+            $assessments = $this->repository->all(
+                ['user_id' => $user->id],
+                ['questions', 'questions.options', 'course']
+            );
+        }
+
+        return Inertia::render('assessment/index', [
+            'can' => can(),
+            'courses' => $courses,
+            'assessments' => $assessments
+        ]);
+    }
+
+    /**
+     * Store a newly created assessment in storage.
+     */
+    public function store(Request $request)
+    {
+        // Validate request data
+        $request->validate([
+            'title'               => 'required|string',
+            'course_id'           => 'required|uuid|exists:courses,id',
+            'type'                => 'required|string|in:quiz,exam,assignment',
+            'passing_score'       => 'required|integer',
+            'attempts_allowed'    => 'required|integer',
+            'due_date'            => 'required|date',
+            'questions'           => 'required|array',
+            'questions.*.text'    => 'required|string',
+            'questions.*.type'    => 'required|string',
+            'questions.*.points'  => 'required|integer',
+            'questions.*.options' => 'nullable|array'
+        ]);
+
+        try {
+            $payload = $request->all();
+            $payload['user_id'] = auth()->id();
+
+            $this->repository->store($payload);
+
+            return redirect()->route('assessments.index');
+        } catch (\Throwable $e) {
+            info($e->getMessage());
+            return back()->withErrors([
+                'message' => 'Failed to create Assessment'
+            ]);
+        }
+    }
+
+    /**
+     * Display the specified assessment.
+     */
+    public function show(string $id)
+    {
+        $assessment = Assessment::with(['questions', 'questions.options', 'course'])->findOrFail($id);
+
+        return Inertia::render('assessment/details', [
+            'can' => can(),
+            'assessment' => $assessment,
+            'submissions' => [] // Placeholder for future submissions
+        ]);
+    }
+
+    /**
+     * Update the specified assessment in storage.
+     * (Not implemented)
+     */
+    public function update(Request $request, string $id)
+    {
+        // To be implemented
+    }
+
+    /**
+     * Remove the specified assessment from storage.
+     */
+    public function destroy(string $id)
+    {
+        $model = $this->repository->find($id);
+        if (!$model) {
+            return back()->withErrors([
+                'message' => 'Assessment not found'
+            ]);
+        }
+
+        $model->delete();
+
+        return to_route('assessments.index');
+    }
+
+    /**
+     * Start the specified assessment
+     */
+    public function start($id) {
+        $assessment = Assessment::with([
+            'questions', 
+            'questions.options', 'course'])->findOrFail($id);
+        if (!$assessment) {
+            return back()->withErrors([
+                'message' => 'Assessment not found'
+            ]);
+        }
+
+        return Inertia::render('assessment/start', [
+            'can' => can(),
+            'assessment' => $assessment,
+        ]);
+    }
+}
