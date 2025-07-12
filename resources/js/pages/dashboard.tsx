@@ -13,18 +13,18 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 
-const tableHeaders: any[] = ['Name', 'Age', 'Email', 'Status'];
+const tableHeaders: any[] = ['Name', 'Course', 'Matric', 'Status'];
 const tableData: any[] = [
-    { name: 'John Doe', age: 28, email: 'john@example.com', status: 'Active' },
-    { name: 'Jane Smith', age: 32, email: 'jane@example.com', status: 'Inactive' },
-    { name: 'Bob Johnson', age: 45, email: 'bob@example.com', status: 'Active' },
-    { name: 'Alice Williams', age: 24, email: 'alice@example.com', status: 'Pending' },
-    { name: 'Alice Williams', age: 24, email: 'alice@example.com', status: 'Pending' },
-    { name: 'Alice Williams', age: 24, email: 'alice@example.com', status: 'Pending' },
-    { name: 'Alice Williams', age: 24, email: 'alice@example.com', status: 'Pending' },
-    { name: 'Alice Williams', age: 24, email: 'alice@example.com', status: 'Pending' },
-    { name: 'Alice Williams', age: 24, email: 'alice@example.com', status: 'Pending' },
-    { name: 'Alice Williams', age: 24, email: 'alice@example.com', status: 'Pending' },
+    { name: 'John Doe', age: 'CPM 101', email: 'john@example.com', status: 'Active' },
+    { name: 'Jane Smith', age: 'CPM 101', email: 'jane@example.com', status: 'Inactive' },
+    { name: 'Bob Johnson', age: 'CPM 101', email: 'bob@example.com', status: 'Active' },
+    { name: 'Alice Williams', age: 'CPM 101', email: 'alice@example.com', status: 'Pending' },
+    { name: 'Alice Williams', age: 'CPM 101', email: 'alice@example.com', status: 'Pending' },
+    // { name: 'Alice Williams', age: 24, email: 'alice@example.com', status: 'Pending' },
+    // { name: 'Alice Williams', age: 24, email: 'alice@example.com', status: 'Pending' },
+    // { name: 'Alice Williams', age: 24, email: 'alice@example.com', status: 'Pending' },
+    // { name: 'Alice Williams', age: 24, email: 'alice@example.com', status: 'Pending' },
+    // { name: 'Alice Williams', age: 24, email: 'alice@example.com', status: 'Pending' },
 ];
 
 type Props = {

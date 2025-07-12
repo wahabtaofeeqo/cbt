@@ -86,12 +86,55 @@ class AssessmentController extends Controller
     }
 
     /**
+     * Store a newly created assessment in storage.
+     */
+    public function submit(Request $request, $id)
+    {
+        // Validate request data
+        $request->validate([
+            'answers' => 'required|array',
+            'answers.*.answer' => 'nullable',
+            'answers.*.questionId' => 'required|exists:questions,id'
+        ]);
+
+        try {
+            $model = $this->repository->find($id);
+            if (!$model) {
+                return back()->withErrors([
+                    'message' => 'Assessment not found'
+                ]);
+            }
+
+            $payload = $request->all();
+            $submission = \App\Models\Submission::create([
+                'assessment_id' => $id,
+                'student_id' => auth()->user()->student->id
+            ]);
+
+            foreach ($payload['answers'] as $answer) {
+                $submission->answers()->create([
+                    'response' => $answer['answer'],
+                    'question_id' => $answer['questionId']
+                ]);
+            }
+
+            //
+            return back()->with(['message' => 'Submitted successfully']);
+        }
+        catch (\Throwable $e) {
+            info($e->getMessage());
+            return back()->withErrors([
+                'message' => 'Failed to submit Assessment'
+            ]);
+        }
+    }
+
+    /**
      * Display the specified assessment.
      */
     public function show(string $id)
     {
         $assessment = Assessment::with(['questions', 'questions.options', 'course'])->findOrFail($id);
-
         return Inertia::render('assessment/details', [
             'can' => can(),
             'assessment' => $assessment,

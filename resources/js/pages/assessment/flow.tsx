@@ -35,9 +35,9 @@ const AssessmentFlow = ({ courseId }) => {
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === 'questions' ? 'bg-primary text-white' : step === 'confirmation' ? 'bg-green-500 text-white' : 'bg-gray-200'}`}>2</div>
             <span>Questions</span>
           </div>
-          <div className={`flex items-center gap-2 ${step === 'confirmation' ? 'font-semibold text-primary' : ''}`}>
+          <div className={`flex items-center gap-2 ${step === 'preview' ? 'font-semibold text-primary' : ''}`}>
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === 'confirmation' ? 'bg-primary text-white' : 'bg-gray-200'}`}>3</div>
-            <span>Confirmation</span>
+            <span>Preview</span>
           </div>
         </div>
       </div>
@@ -58,7 +58,7 @@ const AssessmentFlow = ({ courseId }) => {
         />
       )}
 
-      {step === 'confirmation' && (
+      {step === 'preview' && (
         <div className="space-y-6 text-center">
           <div className="text-green-500">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -71,10 +71,11 @@ const AssessmentFlow = ({ courseId }) => {
             <p><span className="font-semibold">Type:</span> {assessment.type}</p>
             <p><span className="font-semibold">Questions:</span> {assessment.questions.length}</p>
           </div>
-          <div className="flex justify-center gap-4">
+
+          {/* <div className="flex justify-center gap-4">
             <Button onClick={() => setStep('setup')}>Create Another</Button>
             <Button variant="outline">View Assessment</Button>
-          </div>
+          </div> */}
         </div>
       )}
     </div>

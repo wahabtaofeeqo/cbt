@@ -10,7 +10,7 @@ class Question extends Model
     use HasUuids;
 
     protected $fillable = [
-        'text', 'type', 'points', 'assessment_id'
+        'text', 'type', 'points', 'assessment_id', 'status'
     ];
 
     public function assessment() {

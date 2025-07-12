@@ -5,7 +5,7 @@ type Props = {
     title: string
     label: string
     description: string
-    callback: MouseEventHandler
+    callback?: MouseEventHandler
 }
 const EmptyState = ({title, label, description, callback}: Props) => {
     return (
@@ -36,14 +36,18 @@ const EmptyState = ({title, label, description, callback}: Props) => {
                 </p>
 
                 {/* CTA Button */}
-                <div className="mt-6">
-                    <button onClick={callback}
-                    className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                    <PlusCircle className="-ml-0.5 mr-1.5 h-5 w-5" />
-                        {label}
-                    </button>
-                </div>
+                {
+                    callback && (
+                        <div className="mt-6">
+                            <button onClick={callback}
+                            className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            >
+                            <PlusCircle className="-ml-0.5 mr-1.5 h-5 w-5" />
+                                {label}
+                            </button>
+                        </div>
+                    )
+                }
             </div>
         </div>
     )

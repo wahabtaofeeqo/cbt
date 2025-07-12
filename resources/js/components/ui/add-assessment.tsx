@@ -12,9 +12,129 @@ type Props = {
     model?: Assessment
 }
 
+const tableHeaders: any[] = ['SN', 'Text', 'Type', ''];
+const dummyQuestions = [
+    {
+        "id": "0197d83a-b9ee-7140-8550-0f5768c4fc8d",
+        "text": "What's HTML",
+        "type": "multiple-choice",
+        "points": 1,
+        "assessment_id": "0197d83a-b9d9-71bd-9098-a6dd952d5320",
+        "created_at": "2025-07-05T01:36:56.000000Z",
+        "updated_at": "2025-07-07T23:37:43.000000Z",
+        "status": "Active",
+        "options": [
+            {
+                "id": "0197d83a-b9f3-70b3-900f-98c7f516ebb0",
+                "value": "Hypertext",
+                "is_correct": 0,
+                "question_id": "0197d83a-b9ee-7140-8550-0f5768c4fc8d",
+                "created_at": "2025-07-05T01:36:56.000000Z",
+                "updated_at": "2025-07-08T00:00:16.000000Z"
+            },
+            {
+                "id": "0197d83a-b9f6-7108-94d6-50cd25763bf2",
+                "value": "CoderText",
+                "is_correct": 1,
+                "question_id": "0197d83a-b9ee-7140-8550-0f5768c4fc8d",
+                "created_at": "2025-07-05T01:36:56.000000Z",
+                "updated_at": "2025-07-08T00:00:16.000000Z"
+            },
+            {
+                "id": "0197d83a-b9fa-702d-a439-b7c102960b87",
+                "value": "MyText",
+                "is_correct": 0,
+                "question_id": "0197d83a-b9ee-7140-8550-0f5768c4fc8d",
+                "created_at": "2025-07-05T01:36:56.000000Z",
+                "updated_at": "2025-07-08T00:00:16.000000Z"
+            }
+        ]
+    },
+    {
+        "id": "0197d83a-b9ff-713b-8560-9ab49f973dea",
+        "text": "Are you Happy",
+        "type": "true-false",
+        "points": 1,
+        "assessment_id": "0197d83a-b9d9-71bd-9098-a6dd952d5320",
+        "created_at": "2025-07-05T01:36:56.000000Z",
+        "updated_at": "2025-07-05T01:36:56.000000Z",
+        "status": "active",
+        "options": [
+            {
+                "id": "0197d83a-ba02-70d2-8a31-5fd4c9084d99",
+                "value": "Yes",
+                "is_correct": 1,
+                "question_id": "0197d83a-b9ff-713b-8560-9ab49f973dea",
+                "created_at": "2025-07-05T01:36:56.000000Z",
+                "updated_at": "2025-07-05T01:36:56.000000Z"
+            },
+            {
+                "id": "0197d83a-ba08-734b-abc7-538a1d9a48cf",
+                "value": "No",
+                "is_correct": 1,
+                "question_id": "0197d83a-b9ff-713b-8560-9ab49f973dea",
+                "created_at": "2025-07-05T01:36:56.000000Z",
+                "updated_at": "2025-07-05T01:36:56.000000Z"
+            },
+            {
+                "id": "0197d83a-ba0c-71b2-b69a-507b42232cb2",
+                "value": "Maybe",
+                "is_correct": 1,
+                "question_id": "0197d83a-b9ff-713b-8560-9ab49f973dea",
+                "created_at": "2025-07-05T01:36:56.000000Z",
+                "updated_at": "2025-07-05T01:36:56.000000Z"
+            }
+        ]
+    },
+    {
+        "id": "0197d83a-ba0f-7243-9677-977f46fa7ed7",
+        "text": "Who are you",
+        "type": "short-answer",
+        "points": 1,
+        "assessment_id": "0197d83a-b9d9-71bd-9098-a6dd952d5320",
+        "created_at": "2025-07-05T01:36:56.000000Z",
+        "updated_at": "2025-07-05T01:36:56.000000Z",
+        "status": "active",
+        "options": []
+    },
+    {
+        "id": "0197d83a-ba12-7374-bb93-7ec30221bf3e",
+        "text": "Do you lie",
+        "type": "essay",
+        "points": 1,
+        "assessment_id": "0197d83a-b9d9-71bd-9098-a6dd952d5320",
+        "created_at": "2025-07-05T01:36:56.000000Z",
+        "updated_at": "2025-07-05T01:36:56.000000Z",
+        "status": "active",
+        "options": []
+    },
+    {
+        "id": "0197e77d-7a90-737d-9905-147a9176c92a",
+        "text": "Aren't you tired?",
+        "type": "short-answer",
+        "points": 1,
+        "assessment_id": "0197d83a-b9d9-71bd-9098-a6dd952d5320",
+        "created_at": "2025-07-08T00:44:09.000000Z",
+        "updated_at": "2025-07-08T00:44:09.000000Z",
+        "status": "Active",
+        "options": []
+    },
+    {
+        "id": "0197e77e-3e76-7248-b09f-267d54c60687",
+        "text": "Aren't you tired?",
+        "type": "short-answer",
+        "points": 1,
+        "assessment_id": "0197d83a-b9d9-71bd-9098-a6dd952d5320",
+        "created_at": "2025-07-08T00:44:59.000000Z",
+        "updated_at": "2025-07-08T00:44:59.000000Z",
+        "status": "Active",
+        "options": []
+    },
+]
+
 const AddAssessment = ({courses, onClose, model}: Props) => {
 
-    const [step, setStep] = useState('setup');
+    const [step, setStep] = useState('preview');
     const { data, setData, post, put, processing, errors, reset } = useForm<any>({
         title: '',
         type: 'quiz',
@@ -34,18 +154,18 @@ const AddAssessment = ({courses, onClose, model}: Props) => {
     };
 
     const handleAssessmentComplete = (finalQuestions: any) => {
-        setData({...data, questions: finalQuestions});
-        post(route('assessments.store'), {
-            onSuccess: () => {
-                reset();
-                if(onClose) onClose();
-                toast('Assessment added successfully')
-            },
-            onError: (e: any) => {
-                toast(e.message ?? 'Failed to create Assessment');
-            }
-        })
-        setStep('confirmation');
+        // setData({...data, questions: finalQuestions});
+        // post(route('assessments.store'), {
+        //     onSuccess: () => {
+        //         reset();
+        //         if(onClose) onClose();
+        //         toast('Assessment added successfully')
+        //     },
+        //     onError: (e: any) => {
+        //         toast(e.message ?? 'Failed to create Assessment');
+        //     }
+        // })
+        setStep('preview');
     };
 
     useEffect(() => {
@@ -66,9 +186,9 @@ const AddAssessment = ({courses, onClose, model}: Props) => {
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === 'questions' ? 'bg-primary text-white' : step === 'confirmation' ? 'bg-green-500 text-white' : 'bg-gray-200'}`}>2</div>
                     <span>Questions</span>
                 </div>
-                <div className={`flex items-center gap-2 ${step === 'confirmation' ? 'font-semibold text-primary' : ''}`}>
+                <div className={`flex items-center gap-2 ${step === 'preview' ? 'font-semibold text-primary' : ''}`}>
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === 'confirmation' ? 'bg-primary text-white' : 'bg-gray-200'}`}>3</div>
-                    <span>Confirmation</span>
+                    <span>Preview</span>
                 </div>
             </div>
 
@@ -94,39 +214,56 @@ const AddAssessment = ({courses, onClose, model}: Props) => {
             }
 
             {
-                step === 'confirmation' && (
-                    <div className="space-y-6 text-center">
-                        <div className="text-green-500 text-center">
-                            {
-                                processing
-                                ? (
-                                    <div role="status text-center">
-                                        <svg aria-hidden="true" className="mx-auto w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                                            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-                                        </svg>
-                                        <span className="sr-only">Loading...</span>
-                                    </div>
-                                ) 
-                                : (
-                                   <>
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-
-                                        <h3 className="text-xl font-semibold mt-2">Assessment Created Successfully!</h3>
-                                   </>
-                                )
-                            }
+                step === 'preview' && (
+                    <div className="space-y-6">
+                        <h4 className="font-bold mb-2">Details</h4>
+                        <div className="border mb-4 p-3 rounded">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui vitae modi voluptates! Enim, nobis minus eius recusandae iusto obcaecati doloribus laudantium accusamus perspiciatis quidem quisquam natus quas sed consequuntur voluptatum?
                         </div>
 
-                        <div className="space-y-2">
-                            <p><span className="font-semibold">Title:</span> {data.title}</p>
-                            <p><span className="font-semibold">Type:</span> {data.type}</p>
-                            <p><span className="font-semibold">Questions:</span> {data.questions?.length}</p>
+                        <h4 className="font-bold mb-2">Questions</h4>
+                        <div className="overflow-x-auto border rounded">
+                            <table className="min-w-full divide-y divide-gray-200 shadow-sm rounded-lg overflow-hidden">
+                                <thead className="bg-gray-50">
+                                <tr>
+                                    {tableHeaders.map((header: any, index: number) => (
+                                    <th
+                                        key={index}
+                                        scope="col"
+                                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    >
+                                        {header}
+                                    </th>
+                                    ))}
+                                </tr>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                    {dummyQuestions.map((row: any, rowIndex: number) => (
+                                        <tr
+                                        key={rowIndex}
+                                        className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50 hover:bg-gray-100'}>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                {rowIndex + 1}
+                                            </td>
+
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                {row.text}
+                                            </td>
+
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                {row.type}
+                                            </td>
+
+                                            <td>
+                                             X
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
                         
-                        <div className="flex justify-center gap-4">
+                        <div className="flex justify-end gap-4">
                             <Button onClick={() => setStep('setup')}>Create Another</Button>
                             <Button variant="outline">View Assessment</Button>
                         </div>

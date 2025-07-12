@@ -38,6 +38,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/', 'AssessmentController@store')->name('assessments.store');
         Route::put('{id}', 'AssessmentController@update')->name('assessments.update');
         Route::delete('{id}', 'AssessmentController@destroy')->name('assessments.delete');
+        Route::post('{id}/submit', 'AssessmentController@submit')->name('assessments.submit');
     });
 
     // Department
@@ -47,6 +48,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/', 'DepartmentController@store')->name('departments.store');
         Route::put('{id}', 'DepartmentController@update')->name('departments.update');
         Route::delete('{id}', 'DepartmentController@destroy')->name('departments.delete');
+    });
+
+    // Questions
+    Route::prefix('questions')->group(function () {
+        Route::get('/', 'QuestionController@index')->name('questions.index');
+        Route::get('{id}', 'QuestionController@show')->name('questions.show');
+        Route::post('/', 'QuestionController@store')->name('questions.store');
+        Route::put('{id}', 'QuestionController@update')->name('questions.update');
+        Route::delete('{id}', 'QuestionController@destroy')->name('questions.delete');
     });
 
     // Tests
