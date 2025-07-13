@@ -38,7 +38,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/', 'AssessmentController@store')->name('assessments.store');
         Route::put('{id}', 'AssessmentController@update')->name('assessments.update');
         Route::delete('{id}', 'AssessmentController@destroy')->name('assessments.delete');
+
+        // Submissions
         Route::post('{id}/submit', 'AssessmentController@submit')->name('assessments.submit');
+        Route::post('submissions/{id}', 'AssessmentController@updateSubmissionScore')->name('assessments.score');
+        Route::get('{id}/submissions/{submissionId}', 'AssessmentController@loadSubmission')->name('assessments.submission');
     });
 
     // Department

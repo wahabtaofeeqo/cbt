@@ -30,7 +30,8 @@ class IndexController extends Controller
 
             return Inertia::render('students/dashboard', [
                 'assessments' => $assessments,
-                'submissions' => \App\Models\Submission::where('student_id', $student->id)->get()
+                'roles' => auth()->user()->getRoleNames(),
+                'submissions' => \App\Models\Submission::with('assessment.course')->where('student_id', $student->id)->get()
             ]);
         }
 

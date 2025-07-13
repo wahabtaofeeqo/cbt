@@ -6,6 +6,7 @@ import EmptyState from "@/components/ui/empty-state"
 import AppLayout from "@/layouts/app-layout"
 import { Assessment, BreadcrumbItem } from "@/types"
 import { Head, Link, router } from "@inertiajs/react"
+import { UserCheck } from "lucide-react"
 import { useState } from "react"
 import { BiSolidFoodMenu } from "react-icons/bi"
 import { CiMenuKebab } from "react-icons/ci"
@@ -35,10 +36,6 @@ const AssessmentDetails = ({assessment, submissions}: Props) => {
     const [isOpen, setOpen] = useState(false);
     const [isDelete, setDelete] = useState(false);
     const [question, setQuestion] = useState<any>(null);
-    
-    const goTo = () => {
-        router.get(route('assessments.start', {id: assessment.id}))
-    }
     
     const handleEdit = (model: any) => {
         setQuestion(model)
@@ -105,8 +102,11 @@ const AssessmentDetails = ({assessment, submissions}: Props) => {
             </Dialog>
 
             <div className="p-4">
+                <h4 className="font-bold mb-2">Course</h4>
+                <p>Code: {assessment.course.code}</p>
+                <p>Name: {assessment.course.title}</p>
 
-                <h4 className="font-bold mb-2">Submissions</h4>
+                <h4 className="font-bold mb-2 mt-6">Submissions</h4>
                 {/* Submissions */}
                 {
                     submissions.length == 0 ? (
@@ -124,7 +124,7 @@ const AssessmentDetails = ({assessment, submissions}: Props) => {
                                             {/* Three dots dropdown menu */}
                                             <div className="absolute top-3 right-3">
                                                 <DropdownMenu>
-                                                   <DropdownMenuTrigger asChild>
+                                                   {/* <DropdownMenuTrigger asChild>
                                                         <Button
                                                         variant="ghost" size="icon"
                                                         className="h-8 w-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -132,7 +132,7 @@ const AssessmentDetails = ({assessment, submissions}: Props) => {
                                                         <CiMenuKebab />
                                                         <span className="sr-only">Actions</span>
                                                         </Button>
-                                                    </DropdownMenuTrigger>
+                                                    </DropdownMenuTrigger> */}
 
                                                     <DropdownMenuContent align="end" className="w-40">
                                                         <DropdownMenuItem
@@ -156,10 +156,11 @@ const AssessmentDetails = ({assessment, submissions}: Props) => {
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>
                                             </div>
-                                            <BiSolidFoodMenu className="text-3xl" />
-                                            <h4 className="font-bold mb-2">{item.course.code}</h4>
-                                            <p className="text-slate-500 mb-6 text-sm">{item.submissions ?? 0} submissions</p>
-                                            <Link href={route('assessments.show', {id: item.id})} type="button" className="rounded w-full block p-1 text-center bg-black text-white w-full text-sm h-8 hover:bg-gray-500">View </Link>
+
+                                            <UserCheck className="text-3xl mb-2" />
+                                            <h4 className="font-bold mb-2">{item.student.matric_number}</h4>
+                                            <p className="text-slate-500 mb-6 text-sm">{item.student.user.name}</p>
+                                            <Link href={route('assessments.submission', {id: assessment.id, submissionId: item.id})} type="button" className="rounded w-full block p-1 text-center bg-black text-white w-full text-sm h-8 hover:bg-gray-500">View </Link>
                                         </div>
                                     </>
                                 )

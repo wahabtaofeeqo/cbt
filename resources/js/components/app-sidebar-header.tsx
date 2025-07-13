@@ -2,16 +2,20 @@ import { Breadcrumbs } from '@/components/breadcrumbs';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { type BreadcrumbItem as BreadcrumbItemType } from '@/types';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
-import { FaAffiliatetheme } from 'react-icons/fa';
 import { Button } from './ui/button';
 import { Appearance, useAppearance } from '@/hooks/use-appearance';
+import { LucideIcon, Monitor, Moon, Sun } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: BreadcrumbItemType[] }) {
+    const { appearance, updateAppearance } = useAppearance();
+    const tabs: { value: Appearance; icon: LucideIcon; label: string }[] = [
+        { value: 'light', icon: Sun, label: 'Light' },
+        { value: 'dark', icon: Moon, label: 'Dark' },
+        { value: 'system', icon: Monitor, label: 'System' },
+    ];
 
-    const appearance = useAppearance()
-    const setTheme = (name: Appearance) => {
-        appearance.updateAppearance(name);
-    }
+    const Icon = tabs.find(item => item.value == appearance)?.icon
 
     return (
         <header className="border-sidebar-border/50 flex h-16 shrink-0 items-center gap-2 border-b px-6 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4">
@@ -24,27 +28,26 @@ export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: Breadcrum
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button
-                        variant="ghost" size="icon"
-                        className="h-8 w-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
-                        >
-                            <FaAffiliatetheme />
-                        <span className="sr-only">Actions</span>
+                            variant="ghost" size="icon"
+                            className="h-8 w-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
+                            {
+                                Icon ? <Icon /> : null
+                            }
                         </Button>
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent align="end" className="w-40">
+                    <DropdownMenuContent align="end" className="inline-flex gap-1 rounded-lg bg-neutral-100 p-1 dark:bg-neutral-800">
                         {
-                            ['light', 'dark', 'system'].map((item: any) => (
-                                <DropdownMenuItem
-                                    onClick={() => setTheme(item)}
-                                    className="cursor-pointer"
-                                    >
-                                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                    {item}
-                                </DropdownMenuItem>
-                            ))
+                            tabs.map(({value, icon: Icon, label}) => {
+                                return (
+                                    <DropdownMenuItem
+                                        onClick={() => updateAppearance(value)}
+                                        className={cn("cursor-pointer", appearance === value ? 'bg-white shadow-xs dark:bg-neutral-700 dark:text-neutral-100' : '')} >
+                                        <Icon className="-ml-1 h-4 w-4" />
+                                        <span className="ml-1.5 text-sm">{label}</span>
+                                    </DropdownMenuItem>
+                                )
+                            })
                         }
                     </DropdownMenuContent>
                 </DropdownMenu>   

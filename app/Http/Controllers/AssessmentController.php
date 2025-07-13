@@ -90,7 +90,6 @@ class AssessmentController extends Controller
      */
     public function submit(Request $request, $id)
     {
-        // Validate request data
         $request->validate([
             'answers' => 'required|array',
             'answers.*.answer' => 'nullable',
@@ -98,34 +97,51 @@ class AssessmentController extends Controller
         ]);
 
         try {
-            $model = $this->repository->find($id);
-            if (!$model) {
-                return back()->withErrors([
-                    'message' => 'Assessment not found'
-                ]);
+            $assessment = $this->repository->find($id);
+            if (!$assessment) {
+                return back()->withErrors(['message' => 'Assessment not found']);
             }
 
-            $payload = $request->all();
+            $studentId = auth()->user()->student->id;
             $submission = \App\Models\Submission::create([
                 'assessment_id' => $id,
-                'student_id' => auth()->user()->student->id
+                'student_id' => $studentId
             ]);
 
-            foreach ($payload['answers'] as $answer) {
-                $submission->answers()->create([
-                    'response' => $answer['answer'],
+            $questionIds = collect($request->input('answers'))->pluck('questionId');
+            $questions = \App\Models\Question::with('options')
+                ->whereIn('id', $questionIds)
+                ->get()
+                ->keyBy('id');
+
+            $score = 0;
+            $answersData = [];
+
+            foreach ($request->input('answers') as $answer) {
+                $question = $questions->get($answer['questionId']);
+                $selectedOptionId = $answer['answer'] ?? null;
+
+                if ($question && $selectedOptionId) {
+                    $option = $question->options->firstWhere('id', $selectedOptionId);
+                    if ($option && $option->is_correct) {
+                        $score += $question->points;
+                    }
+                }
+
+                $answersData[] = [
+                    'response' => $selectedOptionId,
                     'question_id' => $answer['questionId']
-                ]);
+                ];
             }
 
-            //
+            $submission->answers()->createMany($answersData);
+            $submission->score = $score;
+            $submission->save();
+
             return back()->with(['message' => 'Submitted successfully']);
-        }
-        catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             info($e->getMessage());
-            return back()->withErrors([
-                'message' => 'Failed to submit Assessment'
-            ]);
+            return back()->withErrors(['message' => 'Failed to submit Assessment']);
         }
     }
 
@@ -138,7 +154,50 @@ class AssessmentController extends Controller
         return Inertia::render('assessment/details', [
             'can' => can(),
             'assessment' => $assessment,
-            'submissions' => [] // Placeholder for future submissions
+            'submissions' => \App\Models\Submission::with([
+                'assessment.course', 'student.user'])->where('assessment_id', $id)->get()
+        ]);
+    }
+
+    public function updateSubmissionScore(Request $request, $id) {
+        $request->validate([
+            'score' => 'required|integer|min:0'
+        ]);
+
+        $model = \App\Models\Submission::find($id);
+        if (!$model) {
+            return back()->withErrors([
+                'message' => 'Submission not found'
+            ]);
+        }
+
+        $model->fill($request->all());
+        $model->is_score_visible = true;
+        $model->save();
+
+        //
+        return redirect()->back()->with(['message' => 'Score Updated']);
+    }
+
+    public function loadSubmission($id, $submissionId) {
+
+        $model = $this->repository->find($id);
+        if (!$model) {
+            return back()->withErrors([
+                'message' => 'Assessment not found'
+            ]);
+        }
+
+        $model->load('course');
+        $submission = \App\Models\Submission::with([
+            'assessment.course', 'student.user', 'answers.question.options'])->find($submissionId);
+        
+        //
+        return Inertia::render('assessment/submission', [
+            'can' => can(),
+            'assessment' => $model,
+            'submission' => $submission,
+            'roles' => auth()->user()->getRoleNames()
         ]);
     }
 

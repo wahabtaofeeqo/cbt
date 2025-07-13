@@ -1,22 +1,21 @@
-import { Button } from "@/components/ui/button";
 import QuestionBuilder from "./builder";
 import AssessmentSetup from "./setup";
 import { useState } from "react";
 
 const AssessmentFlow = ({ courseId }) => {
   const [step, setStep] = useState('setup');
-  const [assessment, setAssessment] = useState(null);
+  const [assessment, setAssessment] = useState<any>(null);
 
-  const handleSetupComplete = (setupData) => {
+  const handleSetupComplete = (setupData: any) => {
     setAssessment(setupData);
     setStep('questions');
   };
 
-  const handleQuestionsUpdate = (questions) => {
+  const handleQuestionsUpdate = (questions: any) => {
     setAssessment({...assessment, questions});
   };
 
-  const handleAssessmentComplete = (finalQuestions) => {
+  const handleAssessmentComplete = (finalQuestions: any) => {
     // Submit to backend
     console.log('Final assessment:', {...assessment, questions: finalQuestions});
     setStep('confirmation');

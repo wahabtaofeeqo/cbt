@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('submissions', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->integer('score')->unsigned()->default(0);
+            $table->boolean('is_score_visible')->nullable()->default(false);
             $table->foreignUuid('assessment_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('student_id')->constrained()->onDelete('cascade');
             $table->timestamps();

@@ -64,7 +64,11 @@ export function AppSidebar({roles}: Props) {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                {
+                    roles?.includes('Student') 
+                    ? <></>
+                    : <NavMain items={mainNavItems} />
+                }
             </SidebarContent>
 
             <SidebarFooter>
