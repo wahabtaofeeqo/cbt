@@ -144,7 +144,7 @@ const AddStudent = ({ student, onClose, url, departments }: Props) => {
                         onValueChange={(value) => setData("department_id", value)}
                     >
                         <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select status" />
+                            <SelectValue placeholder="Select" />
                         </SelectTrigger>
 
                         <SelectContent>
@@ -157,7 +157,6 @@ const AddStudent = ({ student, onClose, url, departments }: Props) => {
                             }
                         </SelectContent>
                     </Select>
-                    <InputError message={errors.status} />
                 </div>
 
                  <div className="">

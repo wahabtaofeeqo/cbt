@@ -68,8 +68,8 @@ const AssessmentIndex = ({courses, assessments, can}: Props) => {
             <Head title="Assessments" />
 
             {/* Adding New */}
-            <Dialog open={isOpen} onOpenChange={(open) => {setOpen(open)}}>
-                <DialogContent>
+            <Dialog open={isOpen} onOpenChange={(open) => {setOpen(open)}} modal>
+                <DialogContent className="max-h-[80vh] overflow-y-auto rounded">
                     <DialogTitle>Add Assessment</DialogTitle>
                     <AddAssessment
                         courses={courses}
@@ -160,7 +160,8 @@ const AssessmentIndex = ({courses, assessments, can}: Props) => {
                                             </div>
                                             <BiSolidFoodMenu className="text-3xl" />
                                             <h4 className="font-bold mb-2">{item.course.code}</h4>
-                                            <p className="text-slate-500 mb-6 text-sm">{item.submissions ?? 0} submissions</p>
+                                            <p className="text-slate-500 text-sm">{item.course.level} Level</p>
+                                            <p className="text-slate-500 mb-6 text-sm">{item.course.department.name}</p>
                                             <Link href={route('assessments.show', {id: item.id})} type="button" className="rounded w-full block p-1 text-center bg-black text-white w-full text-sm h-8 hover:bg-gray-500">View </Link>
                                         </div>
                                     </>

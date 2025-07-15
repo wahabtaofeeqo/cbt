@@ -22,4 +22,14 @@ class Student extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the department that owns the Student
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
 }

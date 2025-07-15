@@ -11,30 +11,28 @@ class AssessmentRepository extends CrudRepository {
     }
 
     public function store(array $payload) {
-        $questions = $payload['questions'];
+        $questions = $payload['questions'] ?? [];
+        unset($payload['questions']);
+
         $model = $this->model::create($payload);
 
-        foreach($questions as $question) {
+        foreach ($questions as $question) {
+            $options = $question['options'] ?? [];
+            $correctIndex = $question['correct_answer'] ?? null;
+            unset($question['options'], $question['correct_answer']);
 
-            // Create Question 
             $questionModel = $model->questions()->create($question);
 
-            // Create and attach Question options
-            if(isset($question['options'])) {
-                foreach($question['options'] as $index => $option) {
-                    if($option) { // It could be empty 
-                        $data['value'] = $option;
-                        if($question['correct_answer'] == $index) {
-                            $data['is_correct'] = true;
-                        }
-
-                        $questionModel->options()->create($data);
-                    }
+            foreach ($options as $index => $option) {
+                if (!empty($option)) {
+                    $questionModel->options()->create([
+                        'value' => $option,
+                        'is_correct' => ($correctIndex === $index),
+                    ]);
                 }
             }
         }
 
-        //
         return $model;
     }
 }

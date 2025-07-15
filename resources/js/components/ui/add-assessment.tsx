@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import AssessmentSetup from "@/pages/assessment/setup";
 import QuestionBuilder from "@/pages/assessment/builder";
 import { toast } from "react-toastify";
+import { RxCross2 } from "react-icons/rx";
+import { titleCase } from "@/utils/utils";
 
 type Props = {
     courses: Course[]
@@ -12,130 +14,12 @@ type Props = {
     model?: Assessment
 }
 
-const tableHeaders: any[] = ['SN', 'Text', 'Type', ''];
-const dummyQuestions = [
-    {
-        "id": "0197d83a-b9ee-7140-8550-0f5768c4fc8d",
-        "text": "What's HTML",
-        "type": "multiple-choice",
-        "points": 1,
-        "assessment_id": "0197d83a-b9d9-71bd-9098-a6dd952d5320",
-        "created_at": "2025-07-05T01:36:56.000000Z",
-        "updated_at": "2025-07-07T23:37:43.000000Z",
-        "status": "Active",
-        "options": [
-            {
-                "id": "0197d83a-b9f3-70b3-900f-98c7f516ebb0",
-                "value": "Hypertext",
-                "is_correct": 0,
-                "question_id": "0197d83a-b9ee-7140-8550-0f5768c4fc8d",
-                "created_at": "2025-07-05T01:36:56.000000Z",
-                "updated_at": "2025-07-08T00:00:16.000000Z"
-            },
-            {
-                "id": "0197d83a-b9f6-7108-94d6-50cd25763bf2",
-                "value": "CoderText",
-                "is_correct": 1,
-                "question_id": "0197d83a-b9ee-7140-8550-0f5768c4fc8d",
-                "created_at": "2025-07-05T01:36:56.000000Z",
-                "updated_at": "2025-07-08T00:00:16.000000Z"
-            },
-            {
-                "id": "0197d83a-b9fa-702d-a439-b7c102960b87",
-                "value": "MyText",
-                "is_correct": 0,
-                "question_id": "0197d83a-b9ee-7140-8550-0f5768c4fc8d",
-                "created_at": "2025-07-05T01:36:56.000000Z",
-                "updated_at": "2025-07-08T00:00:16.000000Z"
-            }
-        ]
-    },
-    {
-        "id": "0197d83a-b9ff-713b-8560-9ab49f973dea",
-        "text": "Are you Happy",
-        "type": "true-false",
-        "points": 1,
-        "assessment_id": "0197d83a-b9d9-71bd-9098-a6dd952d5320",
-        "created_at": "2025-07-05T01:36:56.000000Z",
-        "updated_at": "2025-07-05T01:36:56.000000Z",
-        "status": "active",
-        "options": [
-            {
-                "id": "0197d83a-ba02-70d2-8a31-5fd4c9084d99",
-                "value": "Yes",
-                "is_correct": 1,
-                "question_id": "0197d83a-b9ff-713b-8560-9ab49f973dea",
-                "created_at": "2025-07-05T01:36:56.000000Z",
-                "updated_at": "2025-07-05T01:36:56.000000Z"
-            },
-            {
-                "id": "0197d83a-ba08-734b-abc7-538a1d9a48cf",
-                "value": "No",
-                "is_correct": 1,
-                "question_id": "0197d83a-b9ff-713b-8560-9ab49f973dea",
-                "created_at": "2025-07-05T01:36:56.000000Z",
-                "updated_at": "2025-07-05T01:36:56.000000Z"
-            },
-            {
-                "id": "0197d83a-ba0c-71b2-b69a-507b42232cb2",
-                "value": "Maybe",
-                "is_correct": 1,
-                "question_id": "0197d83a-b9ff-713b-8560-9ab49f973dea",
-                "created_at": "2025-07-05T01:36:56.000000Z",
-                "updated_at": "2025-07-05T01:36:56.000000Z"
-            }
-        ]
-    },
-    {
-        "id": "0197d83a-ba0f-7243-9677-977f46fa7ed7",
-        "text": "Who are you",
-        "type": "short-answer",
-        "points": 1,
-        "assessment_id": "0197d83a-b9d9-71bd-9098-a6dd952d5320",
-        "created_at": "2025-07-05T01:36:56.000000Z",
-        "updated_at": "2025-07-05T01:36:56.000000Z",
-        "status": "active",
-        "options": []
-    },
-    {
-        "id": "0197d83a-ba12-7374-bb93-7ec30221bf3e",
-        "text": "Do you lie",
-        "type": "essay",
-        "points": 1,
-        "assessment_id": "0197d83a-b9d9-71bd-9098-a6dd952d5320",
-        "created_at": "2025-07-05T01:36:56.000000Z",
-        "updated_at": "2025-07-05T01:36:56.000000Z",
-        "status": "active",
-        "options": []
-    },
-    {
-        "id": "0197e77d-7a90-737d-9905-147a9176c92a",
-        "text": "Aren't you tired?",
-        "type": "short-answer",
-        "points": 1,
-        "assessment_id": "0197d83a-b9d9-71bd-9098-a6dd952d5320",
-        "created_at": "2025-07-08T00:44:09.000000Z",
-        "updated_at": "2025-07-08T00:44:09.000000Z",
-        "status": "Active",
-        "options": []
-    },
-    {
-        "id": "0197e77e-3e76-7248-b09f-267d54c60687",
-        "text": "Aren't you tired?",
-        "type": "short-answer",
-        "points": 1,
-        "assessment_id": "0197d83a-b9d9-71bd-9098-a6dd952d5320",
-        "created_at": "2025-07-08T00:44:59.000000Z",
-        "updated_at": "2025-07-08T00:44:59.000000Z",
-        "status": "Active",
-        "options": []
-    },
-]
+const tableHeaders: any[] = ['SN', 'Text', 'Type'];
 
 const AddAssessment = ({courses, onClose, model}: Props) => {
 
-    const [step, setStep] = useState('preview');
-    const { data, setData, post, put, processing, errors, reset } = useForm<any>({
+    const [step, setStep] = useState('setup');
+    const { data, setData, post, put, processing, reset } = useForm<any>({
         title: '',
         type: 'quiz',
         due_date: "",
@@ -154,19 +38,28 @@ const AddAssessment = ({courses, onClose, model}: Props) => {
     };
 
     const handleAssessmentComplete = (finalQuestions: any) => {
-        // setData({...data, questions: finalQuestions});
-        // post(route('assessments.store'), {
-        //     onSuccess: () => {
-        //         reset();
-        //         if(onClose) onClose();
-        //         toast('Assessment added successfully')
-        //     },
-        //     onError: (e: any) => {
-        //         toast(e.message ?? 'Failed to create Assessment');
-        //     }
-        // })
+        setData({...data, questions: finalQuestions});
         setStep('preview');
     };
+    
+    const removeQuestion = (index: number) => {
+        const questions = [...data.questions];
+        questions.splice(index, 1);
+        handleAssessmentComplete(questions);
+    }
+
+    const submit = () => {
+        post(route('assessments.store'), {
+            onSuccess: () => {
+                reset();
+                if(onClose) onClose();
+                toast('Assessment added successfully')
+            },
+            onError: (e: any) => {
+                toast(e.message ?? 'Failed to create Assessment');
+            }
+        })
+    }
 
     useEffect(() => {
         if(model) {
@@ -218,7 +111,9 @@ const AddAssessment = ({courses, onClose, model}: Props) => {
                     <div className="space-y-6">
                         <h4 className="font-bold mb-2">Details</h4>
                         <div className="border mb-4 p-3 rounded">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui vitae modi voluptates! Enim, nobis minus eius recusandae iusto obcaecati doloribus laudantium accusamus perspiciatis quidem quisquam natus quas sed consequuntur voluptatum?
+                            <h4>Name: <span> {data.title}</span> </h4>
+                            <h4>Type:  <span>{titleCase(data.type)}</span> </h4>
+                            <h4>Passing Score: <span>{data.passing_score}</span></h4>
                         </div>
 
                         <h4 className="font-bold mb-2">Questions</h4>
@@ -238,12 +133,12 @@ const AddAssessment = ({courses, onClose, model}: Props) => {
                                 </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {dummyQuestions.map((row: any, rowIndex: number) => (
+                                    {data?.questions.map((row: any, index: number) => (
                                         <tr
-                                        key={rowIndex}
-                                        className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50 hover:bg-gray-100'}>
+                                        key={index}
+                                        className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50 hover:bg-gray-100'}>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {rowIndex + 1}
+                                                {index + 1}
                                             </td>
 
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -255,7 +150,7 @@ const AddAssessment = ({courses, onClose, model}: Props) => {
                                             </td>
 
                                             <td>
-                                             X
+                                                <RxCross2 className="text-red-500" onClick={() => removeQuestion(index)} />
                                             </td>
                                         </tr>
                                     ))}
@@ -264,8 +159,11 @@ const AddAssessment = ({courses, onClose, model}: Props) => {
                         </div>
                         
                         <div className="flex justify-end gap-4">
-                            <Button onClick={() => setStep('setup')}>Create Another</Button>
-                            <Button variant="outline">View Assessment</Button>
+                            <Button variant="outline" onClick={() => setStep('questions')}>
+                                Back
+                            </Button>
+                            {/* <Button onClick={() => setStep('setup')}>Create Another</Button> */}
+                            <Button disabled={processing || !data?.questions.length} onClick={submit}>Create Assessment</Button>
                         </div>
                     </div>
                 )

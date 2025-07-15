@@ -33,6 +33,10 @@ const QuestionBuilder = ({ assessment, onQuestionsUpdate, onBack, onComplete }: 
     });
   };
 
+  const toNext = () => {
+    onComplete([...assessment.questions])
+  }
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -125,10 +129,10 @@ const QuestionBuilder = ({ assessment, onQuestionsUpdate, onBack, onComplete }: 
           </Button>
           <Button
             type="button"
-            onClick={() => onComplete([...assessment.questions, currentQuestion])}
+            onClick={() => toNext()}
             disabled={assessment?.questions?.length === 0}
           >
-            Complete Assessment
+            Preview Assessment
           </Button>
         </div>
       </div>

@@ -21,11 +21,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 type TeacherProps = {
     courses: Course[]
     teachers: Teacher[]
+    departments: any[]
 }
 
 const tableHeaders: any[] = ['SN', 'Name', 'Department', 'Courses', 'Status', ''];
 
-export default function index({teachers, courses}: TeacherProps) {
+export default function index({teachers, courses, departments}: TeacherProps) {
 
     const [isOpen, setOpen] = useState(false);
     const [isDelete, setDelete] = useState(false);
@@ -68,7 +69,11 @@ export default function index({teachers, courses}: TeacherProps) {
             <Dialog open={isOpen} onOpenChange={(open) => {setOpen(open)}}>
                 <DialogContent>
                     <DialogTitle>Add New Teacher</DialogTitle>
-                    <AddTeacher courses={courses} teacher={teacher} onClose={toggleDialog} />
+                    <AddTeacher 
+                        courses={courses} 
+                        teacher={teacher}
+                        departments={departments}
+                        onClose={toggleDialog} />
                 </DialogContent>
             </Dialog>
 
@@ -133,7 +138,7 @@ export default function index({teachers, courses}: TeacherProps) {
                                             </td>
 
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {row.department}
+                                                {row.department.name}
                                             </td>
 
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

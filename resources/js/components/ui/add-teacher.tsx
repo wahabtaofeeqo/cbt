@@ -13,15 +13,16 @@ import { toast } from "react-toastify";
 type Props = {
     courses: Course[]
     teacher: Teacher,
+    departments: any[]
     onClose: Function
 }
 
-const AddTeacher = ({ courses, teacher, onClose}: Props) => {
+const AddTeacher = ({ courses, teacher, onClose, departments}: Props) => {
     const { data, setData, post, processing, errors, reset } = useForm<any>({
         name: "",
         email: "",
         phone: "",
-        department: "",
+        department_id: "",
         qualifications: "",
         status: "Active",
         courses: [],
@@ -60,7 +61,7 @@ const AddTeacher = ({ courses, teacher, onClose}: Props) => {
                 name: teacher.user.name,
                 email: teacher.user.email,
                 phone: teacher.user.phone,
-                department: teacher.department,
+                department_id: teacher.department_id,
                 // courses: teacher.courses ?? []
             });
 
@@ -122,15 +123,25 @@ const AddTeacher = ({ courses, teacher, onClose}: Props) => {
 
                         <div className="grid gap-2">
                             <Label htmlFor="department">Department*</Label>
-                            <Input
-                                id="department"
-                                name="department"
-                                value={data.department}
-                                onChange={(e) => setData("department", e.target.value)}
-                                placeholder="Computer Science"
-                                required
-                            />
-                            <InputError message={errors.department} />
+                            <Select
+                                value={data.department_id}
+                                onValueChange={(value) => setData("department_id", value)}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select" />
+                                </SelectTrigger>
+
+                                <SelectContent>
+                                    {
+                                        departments.map((department) => (
+                                            <SelectItem key={department.id} value={department.id}>
+                                                {department.name}
+                                            </SelectItem>
+                                        ))
+                                    }
+                                </SelectContent>
+                            </Select>
+                            <InputError message={errors.department_id} />
                         </div>
                     </div>
 

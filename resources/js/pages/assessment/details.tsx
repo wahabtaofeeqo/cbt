@@ -106,7 +106,11 @@ const AssessmentDetails = ({assessment, submissions}: Props) => {
                 <p>Code: {assessment.course.code}</p>
                 <p>Name: {assessment.course.title}</p>
 
-                <h4 className="font-bold mb-2 mt-6">Submissions</h4>
+                <div className="flex items-center justify-between mb-4">
+                    <h4 className="font-bold mt-6">Submissions</h4>
+                    <a className="text-sm font-bold" href={`/assessments/${assessment.id}/export`}>Export Results</a>
+                </div>
+
                 {/* Submissions */}
                 {
                     submissions.length == 0 ? (

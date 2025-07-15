@@ -40,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('{id}', 'AssessmentController@destroy')->name('assessments.delete');
 
         // Submissions
+        Route::get('{id}/export', 'AssessmentController@exportSubmissions');
         Route::post('{id}/submit', 'AssessmentController@submit')->name('assessments.submit');
         Route::post('submissions/{id}', 'AssessmentController@updateSubmissionScore')->name('assessments.score');
         Route::get('{id}/submissions/{submissionId}', 'AssessmentController@loadSubmission')->name('assessments.submission');

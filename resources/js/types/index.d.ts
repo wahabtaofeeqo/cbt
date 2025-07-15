@@ -48,7 +48,9 @@ export interface Course {
     code: string
     title: string
     description: string
+    level: string
     status: string
+    department: any
 }
 
 export interface Teacher {
@@ -56,7 +58,8 @@ export interface Teacher {
     user: User
     status: string
     courses: Course[]
-    department: string
+    department: any
+    department_id: string
 }
 
 export interface Student {

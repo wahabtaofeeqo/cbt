@@ -31,7 +31,8 @@ class TeacherController extends Controller
                 'create_teacher' => auth()->user()->hasRole('Super Admin'),
             ],
             'courses' => $this->courseRepository->all(),
-            'teachers' => $this->repository->all([], ['user', 'courses']),
+            'departments' => \App\Models\Department::all(),
+            'teachers' => $this->repository->all([], ['user', 'courses', 'department']),
         ]);
     }
 
@@ -44,8 +45,8 @@ class TeacherController extends Controller
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
-            'phone' => 'required|string',
-            'department' => 'nullable|string',
+            'phone' => 'required|string|unique:users',
+            'department_id' => 'required|exists:departments,id',
             'courses' => 'required|array',
             'courses.*' => 'required|uuid',
             'qualifications' => 'nullable|string',

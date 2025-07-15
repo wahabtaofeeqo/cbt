@@ -23,4 +23,14 @@ class Course extends Model
     {
         return $this->belongsToMany(Teacher::class);
     }
+
+    /**
+     * Get the department that owns the Course
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
 }

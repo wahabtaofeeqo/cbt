@@ -32,4 +32,14 @@ class Teacher extends Model
     {
         return $this->belongsToMany(Course::class);
     }
+
+    /**
+     * Get the department that owns the Student
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
 }

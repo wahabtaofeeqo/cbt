@@ -7,6 +7,8 @@ use App\Models\Course;
 use App\Models\Assessment;
 use Illuminate\Http\Request;
 use App\Repositories\AssessmentRepository;
+use App\Exports\SubmissionsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AssessmentController extends Controller
 {
@@ -31,7 +33,7 @@ class AssessmentController extends Controller
         // Default: all courses and assessments
         $courses = Course::all();
         $assessments = $this->repository->all([], [
-            'questions', 'questions.options', 'course'
+            'questions', 'questions.options', 'course.department'
         ]);
 
         // If user is a teacher, show only their courses and assessments
@@ -201,13 +203,17 @@ class AssessmentController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified assessment in storage.
-     * (Not implemented)
-     */
-    public function update(Request $request, string $id)
-    {
-        // To be implemented
+    public function exportSubmissions($id) {
+
+        $model = $this->repository->find($id);
+        if (!$model) {
+            return back()->withErrors([
+                'message' => 'Assessment not found'
+            ]);
+        }
+
+        $name = \Str::slug($model->course->title) . '.xlsx';
+        return Excel::download(new SubmissionsExport($id), $name);
     }
 
     /**

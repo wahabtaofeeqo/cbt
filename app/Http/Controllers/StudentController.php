@@ -26,7 +26,7 @@ class StudentController extends Controller
 
         // Fetch all students with their related user data
         return Inertia::render('students/index', [
-            'students' => $this->repository->all([], ['user']),
+            'students' => $this->repository->all([], ['user', 'department']),
             'departments' => $departments
         ]);
     }

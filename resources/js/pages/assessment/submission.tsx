@@ -124,10 +124,12 @@ const AssessmentSubmission = ({can, assessment, submission, roles}: Props) => {
 
                {
                  can.update_score && (
-                    <div className="mb-6 flex items-center justify-between">
-                        <p className="text-xl font-bold">Calculated Score: {submission.score ?? 0}</p>
-                        <button onClick={() => setOpen(true)} className="bg-indigo-600 text-white px-10 py-2 rounded-md text-sm font-medium cursor-pointer">Set Score</button>
-                    </div>
+                    <>
+                        <div className="mb-6 flex items-center justify-between">
+                            <p className="text-xl font-bold">Calculated Score: {submission.score ?? 0}</p>
+                            <button onClick={() => setOpen(true)} className="bg-indigo-600 text-white px-10 py-2 rounded-md text-sm font-medium cursor-pointer">Set Score</button>
+                        </div>
+                    </>
                  )
                }
 

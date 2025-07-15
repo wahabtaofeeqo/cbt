@@ -36,7 +36,13 @@ class IndexController extends Controller
         }
 
         return Inertia::render('dashboard', [
-            'roles' => auth()->user()->getRoleNames()
+            'courses' => \App\Models\Course::count(),
+            'roles' => auth()->user()->getRoleNames(),
+            'students' => \App\Models\Student::count(),
+            'teachers' => \App\Models\Teacher::count(),
+            'departments' => \App\Models\Department::count(),
+            'submissions' => \App\Models\Submission::with(['assessment.course.department', 'student.user'])
+                ->latest()->limit(14)->get()
         ]);
     }
 

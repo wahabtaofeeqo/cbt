@@ -22,7 +22,7 @@ type StudentProps = {
     departments: { id: string, name: string }[]
 }
 
-const tableHeaders: any[] = ['SN', 'Name', 'Department', 'Level', 'Status', ''];
+const tableHeaders: any[] = ['SN', 'Name', 'Department', 'Level', ''];
 
 export default function index({students, departments}: StudentProps) {
 
@@ -137,15 +137,11 @@ export default function index({students, departments}: StudentProps) {
                                             </td>
 
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {row.department}
+                                                {row.department.name}
                                             </td>
 
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                {row.level}
-                                            </td>
-
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {row.status}
                                             </td>
 
                                             <td align="right">
