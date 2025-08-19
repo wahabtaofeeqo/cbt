@@ -61,14 +61,6 @@ class StudentController extends Controller
         }
     }
 
-    /**
-     * Display the specified student.
-     * (Not implemented)
-     */
-    public function show(string $id)
-    {
-        // Method intentionally left blank
-    }
 
     /**
      * Update the specified student in storage.

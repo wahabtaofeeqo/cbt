@@ -30,6 +30,13 @@ class StudentRepository extends CrudRepository {
         $payload['user_id'] = $user->id;
         $model = $this->model::create($payload);
 
+        try {
+            \Mail::to($user)->send(new \App\Mail\SendLoginDetailsMail($user, $payload['matric_number']));
+        } 
+        catch (\Throwable $e) {
+            //
+        }
+
         return $model;
     }
 }

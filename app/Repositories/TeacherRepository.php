@@ -22,7 +22,7 @@ class TeacherRepository extends CrudRepository {
         ]);
 
         // Create user and assign role
-        $password = // Str::random(6);
+        $password = Str::random(6);
         $payload['password'] = Hash::make("Password");
         $user = User::create($payload);
         $user->assignRole($role);
@@ -33,6 +33,15 @@ class TeacherRepository extends CrudRepository {
 
         $model->courses()->attach($payload['courses']);
 
+        try {
+            info("Password: " . $password);
+            \Mail::to($user)->send(new \App\Mail\SendLoginDetailsMail($user, $password));
+        } 
+        catch (\Throwable $e) {
+            //
+        }
+
+        //
         return $model;
     }
 }
