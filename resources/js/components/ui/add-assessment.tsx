@@ -19,11 +19,12 @@ const tableHeaders: any[] = ['SN', 'Text', 'Type'];
 const AddAssessment = ({courses, onClose, model}: Props) => {
 
     const [step, setStep] = useState('setup');
-    const { data, setData, post, put, processing, reset } = useForm<any>({
+    const { data, setData, post, processing, reset } = useForm<any>({
         title: '',
         type: 'quiz',
         due_date: "",
         questions: [],
+        duration: 30,
         passing_score: 70,
         attempts_allowed: 1
     });

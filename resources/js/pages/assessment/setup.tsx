@@ -19,6 +19,7 @@ const AssessmentSetup = ({model, onComplete, courses }: Props) => {
     type: 'quiz',
     due_date: "",
     questions: [],
+    duration: 30,
     passing_score: 70,
     attempts_allowed: 1
   });
@@ -112,13 +113,13 @@ const AssessmentSetup = ({model, onComplete, courses }: Props) => {
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="attempts">Attempts Allowed</Label>
+            <Label htmlFor="duration">Duration (minutes)</Label>
             <Input
-              id="attempts"
+              id="duration"
               type="number"
               min="1"
-              value={assessment.attempts_allowed}
-              onChange={(e: any) => setAssessment({...assessment, attempts_allowed: e.target.value})}
+              value={assessment.duration}
+              onChange={(e: any) => setAssessment({...assessment, duration: e.target.value})}
             />
           </div>
         </div>

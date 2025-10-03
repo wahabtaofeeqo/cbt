@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('assessments', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string("title");
-            $table->string("type");
+            $table->string('title');
+            $table->string('type');
             $table->integer('passing_score');
             $table->integer('attempts_allowed');
-            $table->date("due_date")->nullable();
+            $table->date('due_date')->nullable();
             $table->string('status')->default('active');
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('course_id')->constrained()->onDelete('cascade');

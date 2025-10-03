@@ -78,6 +78,7 @@ export interface Assessment {
     title: string
     type: string
     course: Course
+    duration: number
     submissions: number
     [key: string]: unknown
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Question;
+use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {
@@ -21,37 +21,37 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'text'    => 'required|string',
-            'type'    => 'required|string',
-            'points'  => 'required|integer',
+            'text' => 'required|string',
+            'type' => 'required|string',
+            'points' => 'required|integer',
             'correct_answer' => 'nullable|integer',
-            'status'  => 'sometimes|required|string',
+            'status' => 'sometimes|required|string',
             'options' => 'sometimes|required|array',
             'options.*.id' => 'nullable|uuid|exists:options,id',
             'options.*.value' => 'nullable|string',
             'assessment_id' => 'required|uuid|exists:assessments,id',
         ]);
 
-         try {
+        try {
             $model = Question::create($validated);
 
             // Options
             $options = $validated['options'];
             foreach ($options as $key => $value) {
-                if($value['value']) {
+                if ($value['value']) {
                     $value['is_correct'] = $validated['correct_answer'] == $key;
                     $model->options()->create($value);
                 }
             }
 
             return back()->with([
-                'message' => 'Question added successfully'
+                'message' => 'Question added successfully',
             ]);
-        } 
-        catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             info($e->getMessage());
+
             return back()->withErrors([
-                'message' => 'Failed to create Question'
+                'message' => 'Failed to create Question',
             ]);
         }
     }
@@ -71,22 +71,22 @@ class QuestionController extends Controller
     {
         // Find the question by ID
         $model = Question::find($id);
-        if (!$model) {
+        if (! $model) {
             return back()->withErrors([
-                'message' => 'Question not found'
+                'message' => 'Question not found',
             ]);
         }
 
         // Update question with validated data
         $validated = $request->validate([
-            'text'    => 'required|string',
-            'type'    => 'required|string',
-            'points'  => 'required|integer',
+            'text' => 'required|string',
+            'type' => 'required|string',
+            'points' => 'required|integer',
             'correct_answer' => 'nullable|integer',
-            'status'  => 'sometimes|required|string',
+            'status' => 'sometimes|required|string',
             'options' => 'sometimes|required|array',
             'options.*.id' => 'nullable|uuid|exists:options,id',
-            'options.*.value' => 'nullable|string'
+            'options.*.value' => 'nullable|string',
         ]);
 
         try {
@@ -96,22 +96,22 @@ class QuestionController extends Controller
             $options = $validated['options'];
             foreach ($options as $key => $value) {
                 $option = $model->options()->find($value['id']);
-                if($option) {
+                if ($option) {
                     $value['is_correct'] = $validated['correct_answer'] == $key;
                     $option->update($value);
-                }
-                else {
-                    if($value['value']) $model->options()->create($value);
+                } else {
+                    if ($value['value']) {
+                        $model->options()->create($value);
+                    }
                 }
             }
 
             return back()->with([
-                'message' => 'Updated successfully'
+                'message' => 'Updated successfully',
             ]);
-        } 
-        catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             return back()->withErrors([
-                'message' => 'Failed to update Question'
+                'message' => 'Failed to update Question',
             ]);
         }
     }

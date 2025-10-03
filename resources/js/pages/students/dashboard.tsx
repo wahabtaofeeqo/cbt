@@ -1,4 +1,5 @@
 import AppLayout from "@/layouts/app-layout"
+import { BreadcrumbItem } from "@/types"
 import { titleCase } from "@/utils/utils"
 import { Head, Link } from "@inertiajs/react"
 
@@ -8,12 +9,20 @@ type Props = {
     submissions: any[]
 }
 
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Dashboard',
+        href: '/dashboard',
+    },
+];
+
 const StudentDashboard = ({ roles, assessments, submissions }: Props) => {
+
     return (
         <>
         <Head title="Available Assessments" />
 
-        <AppLayout roles={roles}>
+        <AppLayout roles={roles} breadcrumbs={breadcrumbs}>
             <div className="container p-6 mx-auto">
                 {
                     !assessments.length && !submissions.length
@@ -46,9 +55,11 @@ const StudentDashboard = ({ roles, assessments, submissions }: Props) => {
                                     <p>No Upcoming assessments at this time.</p>
                                 </div>
                         }
-                        <hr className="my-8" />
+                        
                         {
-                            submissions.length && 
+                            submissions.length ?
+                            <>
+                            <hr className="my-8" />
                             <div>
                                 <h4 className="font-bold">Completed Assessments</h4>
                                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
@@ -60,7 +71,7 @@ const StudentDashboard = ({ roles, assessments, submissions }: Props) => {
                                                 <p className="text-gray-600 mb-6">Course: {item.assessment.course.code}</p>
 
                                                 <div>
-                                                    <Link href={route('assessments.submission', {id: item.assessment_id, submissionId: item.id})} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                                    <Link href={route('assessments.submission', {id: item.assessment_id, submissionId: item.id})} className="bg-blue-500 text-white px-4 py-1.5 text-sm rounded-sm hover:bg-blue-600">
                                                         View Submission
                                                     </Link>
                                                 </div>
@@ -70,6 +81,8 @@ const StudentDashboard = ({ roles, assessments, submissions }: Props) => {
                                     }
                                 </div>
                             </div>
+                            </>
+                            : <div></div>
                         }
                     </>)
                 }

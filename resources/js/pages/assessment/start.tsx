@@ -54,7 +54,7 @@ const StartAssessment = ({ can, assessment }: Props) => {
         toast("Submitted successfully");
         setTimeout(() => {
           router.get(route('dashboard'))
-        }, 10000);
+        }, 3000);
       },
       onError: e => {
         toast(e.message ?? 'Failed to submit assessment');
@@ -115,7 +115,7 @@ const StartAssessment = ({ can, assessment }: Props) => {
               <p className="text-gray-600">Type: {titleCase(assessment.type)}</p>
           </div>
 
-          <Timer duration={30} onTimeUp={submit} />
+          <Timer duration={assessment.duration ?? 30} onTimeUp={submit} />
         </div>
 
         <div className="space-y-8 shadow-sm rounded-md p-6">

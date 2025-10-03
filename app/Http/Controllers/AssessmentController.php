@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
-use App\Models\Course;
-use App\Models\Assessment;
-use Illuminate\Http\Request;
-use App\Repositories\AssessmentRepository;
 use App\Exports\SubmissionsExport;
+use App\Models\Assessment;
+use App\Models\Course;
+use App\Repositories\AssessmentRepository;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 
 class AssessmentController extends Controller
@@ -33,7 +33,7 @@ class AssessmentController extends Controller
         // Default: all courses and assessments
         $courses = Course::all();
         $assessments = $this->repository->all([], [
-            'questions', 'questions.options', 'course.department'
+            'questions', 'questions.options', 'course.department',
         ]);
 
         // If user is a teacher, show only their courses and assessments
@@ -48,7 +48,7 @@ class AssessmentController extends Controller
         return Inertia::render('assessment/index', [
             'can' => can(),
             'courses' => $courses,
-            'assessments' => $assessments
+            'assessments' => $assessments,
         ]);
     }
 
@@ -59,17 +59,18 @@ class AssessmentController extends Controller
     {
         // Validate request data
         $request->validate([
-            'title'               => 'required|string',
-            'course_id'           => 'required|uuid|exists:courses,id',
-            'type'                => 'required|string|in:quiz,exam,assignment',
-            'passing_score'       => 'required|integer',
-            'attempts_allowed'    => 'required|integer',
-            'due_date'            => 'required|date',
-            'questions'           => 'required|array',
-            'questions.*.text'    => 'required|string',
-            'questions.*.type'    => 'required|string',
-            'questions.*.points'  => 'required|integer',
-            'questions.*.options' => 'nullable|array'
+            'title' => 'required|string',
+            'course_id' => 'required|uuid|exists:courses,id',
+            'type' => 'required|string|in:quiz,exam,assignment',
+            'passing_score' => 'required|integer',
+            'attempts_allowed' => 'required|integer',
+            'due_date' => 'required|date',
+            'duration' => 'required|integer',
+            'questions' => 'required|array',
+            'questions.*.text' => 'required|string',
+            'questions.*.type' => 'required|string',
+            'questions.*.points' => 'required|integer',
+            'questions.*.options' => 'nullable|array',
         ]);
 
         try {
@@ -81,8 +82,9 @@ class AssessmentController extends Controller
             return redirect()->route('assessments.index');
         } catch (\Throwable $e) {
             info($e->getMessage());
+
             return back()->withErrors([
-                'message' => 'Failed to create Assessment'
+                'message' => 'Failed to create Assessment',
             ]);
         }
     }
@@ -95,19 +97,19 @@ class AssessmentController extends Controller
         $request->validate([
             'answers' => 'required|array',
             'answers.*.answer' => 'nullable',
-            'answers.*.questionId' => 'required|exists:questions,id'
+            'answers.*.questionId' => 'required|exists:questions,id',
         ]);
 
         try {
             $assessment = $this->repository->find($id);
-            if (!$assessment) {
+            if (! $assessment) {
                 return back()->withErrors(['message' => 'Assessment not found']);
             }
 
             $studentId = auth()->user()->student->id;
             $submission = \App\Models\Submission::create([
                 'assessment_id' => $id,
-                'student_id' => $studentId
+                'student_id' => $studentId,
             ]);
 
             $questionIds = collect($request->input('answers'))->pluck('questionId');
@@ -132,7 +134,7 @@ class AssessmentController extends Controller
 
                 $answersData[] = [
                     'response' => $selectedOptionId,
-                    'question_id' => $answer['questionId']
+                    'question_id' => $answer['questionId'],
                 ];
             }
 
@@ -143,6 +145,7 @@ class AssessmentController extends Controller
             return back()->with(['message' => 'Submitted successfully']);
         } catch (\Throwable $e) {
             info($e->getMessage());
+
             return back()->withErrors(['message' => 'Failed to submit Assessment']);
         }
     }
@@ -153,23 +156,25 @@ class AssessmentController extends Controller
     public function show(string $id)
     {
         $assessment = Assessment::with(['questions', 'questions.options', 'course'])->findOrFail($id);
+
         return Inertia::render('assessment/details', [
             'can' => can(),
             'assessment' => $assessment,
             'submissions' => \App\Models\Submission::with([
-                'assessment.course', 'student.user'])->where('assessment_id', $id)->get()
+                'assessment.course', 'student.user'])->where('assessment_id', $id)->get(),
         ]);
     }
 
-    public function updateSubmissionScore(Request $request, $id) {
+    public function updateSubmissionScore(Request $request, $id)
+    {
         $request->validate([
-            'score' => 'required|integer|min:0'
+            'score' => 'required|integer|min:0',
         ]);
 
         $model = \App\Models\Submission::find($id);
-        if (!$model) {
+        if (! $model) {
             return back()->withErrors([
-                'message' => 'Submission not found'
+                'message' => 'Submission not found',
             ]);
         }
 
@@ -181,38 +186,41 @@ class AssessmentController extends Controller
         return redirect()->back()->with(['message' => 'Score Updated']);
     }
 
-    public function loadSubmission($id, $submissionId) {
+    public function loadSubmission($id, $submissionId)
+    {
 
         $model = $this->repository->find($id);
-        if (!$model) {
+        if (! $model) {
             return back()->withErrors([
-                'message' => 'Assessment not found'
+                'message' => 'Assessment not found',
             ]);
         }
 
         $model->load('course');
         $submission = \App\Models\Submission::with([
             'assessment.course', 'student.user', 'answers.question.options'])->find($submissionId);
-        
+
         //
         return Inertia::render('assessment/submission', [
             'can' => can(),
             'assessment' => $model,
             'submission' => $submission,
-            'roles' => auth()->user()->getRoleNames()
+            'roles' => auth()->user()->getRoleNames(),
         ]);
     }
 
-    public function exportSubmissions($id) {
+    public function exportSubmissions($id)
+    {
 
         $model = $this->repository->find($id);
-        if (!$model) {
+        if (! $model) {
             return back()->withErrors([
-                'message' => 'Assessment not found'
+                'message' => 'Assessment not found',
             ]);
         }
 
-        $name = \Str::slug($model->course->title) . '.xlsx';
+        $name = \Str::slug($model->course->title).'.xlsx';
+
         return Excel::download(new SubmissionsExport($id), $name);
     }
 
@@ -222,9 +230,9 @@ class AssessmentController extends Controller
     public function destroy(string $id)
     {
         $model = $this->repository->find($id);
-        if (!$model) {
+        if (! $model) {
             return back()->withErrors([
-                'message' => 'Assessment not found'
+                'message' => 'Assessment not found',
             ]);
         }
 
@@ -236,13 +244,14 @@ class AssessmentController extends Controller
     /**
      * Start the specified assessment
      */
-    public function start($id) {
+    public function start($id)
+    {
         $assessment = Assessment::with([
-            'questions', 
+            'questions',
             'questions.options', 'course'])->findOrFail($id);
-        if (!$assessment) {
+        if (! $assessment) {
             return back()->withErrors([
-                'message' => 'Assessment not found'
+                'message' => 'Assessment not found',
             ]);
         }
 

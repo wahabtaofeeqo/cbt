@@ -256,263 +256,67 @@ export default function index({can, courses, departments}: CourseProps) {
                     {courses.map((course: any, index: number) => (
                         <>
                         <div key={course.id} className="relative group rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1 flex flex-col">
-
-                        {/* Three dots dropdown menu */}
-                        <div className="absolute top-3 right-3">
-                            <DropdownMenu>
-                                {
-                                    can?.create_course && (
-                                        <DropdownMenuTrigger asChild>
-                                            <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="h-8 w-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
-                                            >
-                                            <CiMenuKebab />
-                                            {/* <CircleDotDashedIcon className="h-4 w-4" /> */}
-                                            <span className="sr-only">Actions</span>
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                    )
-                                }
-                                <DropdownMenuContent align="end" className="w-40">
-                                    <DropdownMenuItem
-                                    onClick={() => handleEdit(course)}
-                                    className="cursor-pointer"
-                                    >
-                                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                    Edit
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                    onClick={() => handleDelete(course)}
-                                    className="cursor-pointer text-red-600 focus:text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20"
-                                    >
-                                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                    Delete
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
-
-                        <div className={(can?.create_course ? 'pt-10' : '') + " p-5 flex-1"}>
-                            <div className="flex justify-between items-start mb-3">
-                                <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1">
-                                    {course.title}
-                                </h3>
-                                <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(course.status)}`}>
-                                    {course.status}
-                                </span>
+                            {/* Three dots dropdown menu */}
+                            <div className="absolute top-3 right-3">
+                                <DropdownMenu>
+                                    {
+                                        can?.create_course && (
+                                            <DropdownMenuTrigger asChild>
+                                                <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-8 w-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                                                >
+                                                <CiMenuKebab />
+                                                {/* <CircleDotDashedIcon className="h-4 w-4" /> */}
+                                                <span className="sr-only">Actions</span>
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                        )
+                                    }
+                                    <DropdownMenuContent align="end" className="w-40">
+                                        <DropdownMenuItem
+                                        onClick={() => handleEdit(course)}
+                                        className="cursor-pointer"
+                                        >
+                                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        Edit
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                        onClick={() => handleDelete(course)}
+                                        className="cursor-pointer text-red-600 focus:text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20"
+                                        >
+                                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                        Delete
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             </div>
 
-                            <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">
-                                {course.description}
-                            </p>
-                        </div>
+                            <div className={(can?.create_course ? 'pt-10' : '') + " p-5 flex-1"}>
+                                <div className="flex justify-between items-start mb-3">
+                                    <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1">
+                                        {course.title}
+                                    </h3>
+                                    <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(course.status)}`}>
+                                        {course.status}
+                                    </span>
+                                </div>
 
-                        <div className="px-5 py-3 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-100 dark:border-gray-700 flex justify-end">
-                            <button className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
-                                View Details →
-                            </button>
-                        </div>
-                        </div>
-
-                        <div key={course.id} className="relative group rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1 flex flex-col">
-
-                        {/* Three dots dropdown menu */}
-                        <div className="absolute top-3 right-3">
-                            <DropdownMenu>
-                                {
-                                    can?.create_course && (
-                                        <DropdownMenuTrigger asChild>
-                                            <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="h-8 w-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
-                                            >
-                                            <CiMenuKebab />
-                                            {/* <CircleDotDashedIcon className="h-4 w-4" /> */}
-                                            <span className="sr-only">Actions</span>
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                    )
-                                }
-                                <DropdownMenuContent align="end" className="w-40">
-                                    <DropdownMenuItem
-                                    onClick={() => handleEdit(course)}
-                                    className="cursor-pointer"
-                                    >
-                                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                    Edit
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                    onClick={() => handleDelete(course)}
-                                    className="cursor-pointer text-red-600 focus:text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20"
-                                    >
-                                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                    Delete
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
-
-                        <div className={(can?.create_course ? 'pt-10' : '') + " p-5 flex-1"}>
-                            <div className="flex justify-between items-start mb-3">
-                                <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1">
-                                    {course.title}
-                                </h3>
-                                <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(course.status)}`}>
-                                    {course.status}
-                                </span>
+                                <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">
+                                    {course.description}
+                                </p>
                             </div>
 
-                            <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">
-                                {course.description}
-                            </p>
-                        </div>
-
-                        <div className="px-5 py-3 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-100 dark:border-gray-700 flex justify-end">
-                            <button className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
-                                View Details →
-                            </button>
-                        </div>
-                        </div>
-
-                        <div key={course.id} className="relative group rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1 flex flex-col">
-
-                        {/* Three dots dropdown menu */}
-                        <div className="absolute top-3 right-3">
-                            <DropdownMenu>
-                                {
-                                    can?.create_course && (
-                                        <DropdownMenuTrigger asChild>
-                                            <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="h-8 w-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
-                                            >
-                                            <CiMenuKebab />
-                                            {/* <CircleDotDashedIcon className="h-4 w-4" /> */}
-                                            <span className="sr-only">Actions</span>
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                    )
-                                }
-                                <DropdownMenuContent align="end" className="w-40">
-                                    <DropdownMenuItem
-                                    onClick={() => handleEdit(course)}
-                                    className="cursor-pointer"
-                                    >
-                                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                    Edit
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                    onClick={() => handleDelete(course)}
-                                    className="cursor-pointer text-red-600 focus:text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20"
-                                    >
-                                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                    Delete
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
-
-                        <div className={(can?.create_course ? 'pt-10' : '') + " p-5 flex-1"}>
-                            <div className="flex justify-between items-start mb-3">
-                                <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1">
-                                    {course.title}
-                                </h3>
-                                <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(course.status)}`}>
-                                    {course.status}
-                                </span>
+                            <div className="px-5 py-3 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+                                <button className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
+                                    View Details →
+                                </button>
                             </div>
-
-                            <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">
-                                {course.description}
-                            </p>
-                        </div>
-
-                        <div className="px-5 py-3 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-100 dark:border-gray-700 flex justify-end">
-                            <button className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
-                                View Details →
-                            </button>
-                        </div>
-                        </div>
-
-                        <div key={course.id} className="relative group rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1 flex flex-col">
-
-                        {/* Three dots dropdown menu */}
-                        <div className="absolute top-3 right-3">
-                            <DropdownMenu>
-                                {
-                                    can?.create_course && (
-                                        <DropdownMenuTrigger asChild>
-                                            <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="h-8 w-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
-                                            >
-                                            <CiMenuKebab />
-                                            {/* <CircleDotDashedIcon className="h-4 w-4" /> */}
-                                            <span className="sr-only">Actions</span>
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                    )
-                                }
-                                <DropdownMenuContent align="end" className="w-40">
-                                    <DropdownMenuItem
-                                    onClick={() => handleEdit(course)}
-                                    className="cursor-pointer"
-                                    >
-                                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                    Edit
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                    onClick={() => handleDelete(course)}
-                                    className="cursor-pointer text-red-600 focus:text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20"
-                                    >
-                                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                    Delete
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
-
-                        <div className={(can?.create_course ? 'pt-10' : '') + " p-5 flex-1"}>
-                            <div className="flex justify-between items-start mb-3">
-                                <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1">
-                                    {course.title}
-                                </h3>
-                                <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(course.status)}`}>
-                                    {course.status}
-                                </span>
-                            </div>
-
-                            <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">
-                                {course.description}
-                            </p>
-                        </div>
-
-                        <div className="px-5 py-3 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-100 dark:border-gray-700 flex justify-end">
-                            <button className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
-                                View Details →
-                            </button>
-                        </div>
                         </div>
                         </>
                     ))}

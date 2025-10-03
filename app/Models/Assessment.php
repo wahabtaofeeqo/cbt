@@ -2,31 +2,35 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 
 class Assessment extends Model
 {
     use HasUuids;
 
     protected $fillable = [
-        'title', 'status', 'type', 'due_date',
-        'attempts_allowed', 'passing_score', 'course_id', 'user_id'
+        'title', 'status', 'type', 'due_date', 'duration',
+        'attempts_allowed', 'passing_score', 'course_id', 'user_id',
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function course() {
+    public function course()
+    {
         return $this->belongsTo(Course::class);
     }
-    
-    public function questions() {
+
+    public function questions()
+    {
         return $this->hasMany(Question::class);
     }
 
-    public function submissions() {
+    public function submissions()
+    {
         return $this->hasMany(Submission::class);
     }
 }

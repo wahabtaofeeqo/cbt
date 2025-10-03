@@ -65,6 +65,7 @@ const DepartmentIndex = ({can, departments}: DeptProps) => {
         post(route("departments.store"), {
             onSuccess: () => {
                 reset();
+                setOpen(false)
                 toast('Department added successfully')
             },
             onError: (e) => {
@@ -90,7 +91,7 @@ const DepartmentIndex = ({can, departments}: DeptProps) => {
                                 name="name"
                                 value={data.name}
                                 onChange={(e) => setData("name", e.target.value)}
-                                placeholder="John Doe"
+                                placeholder="Computer Science"
                                 autoComplete="name"
                                 required
                             />

@@ -38,9 +38,9 @@ export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: Breadcrum
 
                     <DropdownMenuContent align="end" className="inline-flex gap-1 rounded-lg bg-neutral-100 p-1 dark:bg-neutral-800">
                         {
-                            tabs.map(({value, icon: Icon, label}) => {
+                            tabs.map(({value, icon: Icon, label}, index) => {
                                 return (
-                                    <DropdownMenuItem
+                                    <DropdownMenuItem key={index}
                                         onClick={() => updateAppearance(value)}
                                         className={cn("cursor-pointer", appearance === value ? 'bg-white shadow-xs dark:bg-neutral-700 dark:text-neutral-100' : '')} >
                                         <Icon className="-ml-1 h-4 w-4" />
